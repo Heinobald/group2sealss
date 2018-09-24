@@ -493,8 +493,6 @@ plot(date47(1:length(date47)-30),h_if); %daily ice growth (difference between da
 
 clear rho_0 rho_i h_0
 
-
-%%blablub
 %% to do
 % interpolate data
 % overlay map with lat/lon data
