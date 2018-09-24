@@ -142,7 +142,7 @@ XTickVec=[datenum(2008,2,4),datenum(2008,3:9,1),datenum(2008,9,23)];
     colormap jet;
     c.LineWidth=0.1;
     c=colorbar;
-    ylabel(c,'temp [°C]');
+    ylabel(c,'temp [Â°C]');
     title('seal47');
     set(gca,'XTick',XTickVec);
     datetick('x','dd.mm.','keepticks');
@@ -156,7 +156,7 @@ XTickVec=[datenum(2008,2,7),datenum(2008,3:10,1),datenum(2008,11,11)];
     colormap jet;
     c.LineWidth=0.1;
     c=colorbar;
-    ylabel(c,'temp [°C]');
+    ylabel(c,'temp [Â°C]');
     title('seal55');
     set(gca,'XTick',XTickVec);
     datetick('x','dd.mm.','keepticks');
@@ -170,7 +170,7 @@ XTickVec=[datenum(2008,2,5),datenum(2008,3:10,1),datenum(2008,11,17)];
     colormap jet;
     c.LineWidth=0.1;
     c=colorbar;
-    ylabel(c,'temp [°C]');
+    ylabel(c,'temp [Â°C]');
     title('seal99');
     set(gca,'XTick',XTickVec);
     datetick('x','dd.mm.','keepticks');
@@ -184,7 +184,7 @@ pcolor(day47,depth47,temp47);
     xlabel('day of year');
     title('seal47');
     c=colorbar;
-    ylabel(c,'temperature [°C]');
+    ylabel(c,'temperature [Â°C]');
 
 pcolor(day55,depth55,temp55);
     shading interp;
@@ -193,7 +193,7 @@ pcolor(day55,depth55,temp55);
     xlabel('day of year');
     title('seal55');
     c=colorbar;
-    ylabel(c,'temperature [°C]');
+    ylabel(c,'temperature [Â°C]');
 
 pcolor(day99,depth99,temp99);
     shading interp;
@@ -202,7 +202,7 @@ pcolor(day99,depth99,temp99);
     xlabel('day of year');
     title('seal99');
     c=colorbar;
-    ylabel(c,'temperature [°C]');
+    ylabel(c,'temperature [Â°C]');
     
 %% time frame when seal stayed in one place
 %seal 47 start 98.24 end: 150.38
@@ -494,9 +494,9 @@ plot(date47(1:length(date47)-30),h_if); %daily ice growth (difference between da
 clear rho_0 rho_i h_0
 
 
-
+%%blablub
 %% to do
 % interpolate data
 % overlay map with lat/lon data
-% Sea ice modelling(FESOM) [Timmermann R, Danilov S, Schröter JA (2006) Geophys Res Abstr 8:07063]
+% Sea ice modelling(FESOM) [Timmermann R, Danilov S, SchrÃ¶ter JA (2006) Geophys Res Abstr 8:07063]
 % When calculating Ice growth NaN is treated as zeroes
