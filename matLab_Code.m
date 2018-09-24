@@ -266,6 +266,8 @@ plot(date55(1:length(date55)-30),h_if); %daily ice growth (difference between da
     title('seal47 - daily ice growth as difference between time frame t and t+30');
     set(gca,'XTick',XTickVec);
     datetick('x','dd.mm.','keepticks');
+print('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\seal55icegrowth','-dsvg')
+    
 
 %% ice formation seal 99
 
@@ -289,6 +291,7 @@ plot(date99(1:length(date99)-30),h_if); %daily ice growth (difference between da
     title('seal99 - daily ice growth as difference between time frame t and t+30');
     set(gca,'XTick',XTickVec);
     datetick('x','dd.mm.','keepticks');
+    print('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\seal99icegrowth','-dsvg')
 clear rho_0 rho_i S_i S_0 S_f h_0
     
 %% mixed layer depth
