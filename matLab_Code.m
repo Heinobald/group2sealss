@@ -27,7 +27,7 @@ sal99 = SAL;
 temp99 = TEMP;
 depth99 = Z;
 
-clear DATE LON LAT SAL TEMP Z;
+clear DATE LON LAT SAL TEMP Z info;
 %end import
 %% date conversion
 day47=date47-datenum(2008,2,4);
@@ -163,7 +163,7 @@ XTickVec=[datenum(2008,2,7),datenum(2008,3:10,1),datenum(2008,11,11)];
 print('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\seal55temptime','-dsvg');
 
 XTickVec=[datenum(2008,2,5),datenum(2008,3:10,1),datenum(2008,11,17)];
-[m,c]=contourf(date99,depth99,temp99, -2:0.5:2);
+[~,c]=contourf(date99,depth99,temp99, -2:0.5:2);
     set(gca, 'ydir', 'reverse');
     ylabel('depth [m]');
     xlabel('day of year');
@@ -175,7 +175,7 @@ XTickVec=[datenum(2008,2,5),datenum(2008,3:10,1),datenum(2008,11,17)];
     set(gca,'XTick',XTickVec);
     datetick('x','dd.mm.','keepticks');
 print('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\seal99temptime','-dsvg');
-
+clear m h47 h55 h99 c XTickVec;
 %% p color plots
 pcolor(day47,depth47,temp47);
     shading interp;
@@ -203,7 +203,7 @@ pcolor(day99,depth99,temp99);
     title('seal99');
     c=colorbar;
     ylabel(c,'temperature [°C]');
-    
+clear c;
 %% time frame when seal stayed in one place
 %seal 47 start 98.24 end: 150.38
 day47(219);
@@ -214,17 +214,17 @@ day55(565);
 %seal 99 start 35.17 end: 275.56
 day99(1);
 day99(665);
-
+clear ans;
 %% ice formation rate
 %seal 47
 rho_0=1027; %kg m-3
 rho_i=920; %kg m-3
 S_i=10;      %psu
 h_0=100;     %m
-S_0=sum(sal47(3:21,250:260)); %salinity from date250 to date350
-S_f=sum(sal47(3:21,350:360));
-h_i = (rho_0*h_0*S_0-rho_0*h_0*S_f)/(rho_i*S_i-rho_0*S_f); %net ice formation rate over the time frame
-h_id = h_i/(date47(350)-date47(250)); %ice formation rate by day
+% S_0=sum(sal47(3:21,250:260)); %salinity from date250 to date350
+% S_f=sum(sal47(3:21,350:360));
+% h_i = (rho_0*h_0*S_0-rho_0*h_0*S_f)/(rho_i*S_i-rho_0*S_f); %net ice formation rate over the time frame
+% h_id = h_i/(date47(350)-date47(250)); %ice formation rate by day
 clear h_if
 h_if=zeros(1,length(lon47)-30);
 for t=1:(length(date47)-30)
@@ -240,8 +240,10 @@ plot(date47(1:length(date47)-30),h_if); %daily ice growth (difference between da
     xlabel('day of year');
     set(gca,'XTick',XTickVec);
     datetick('x','dd.mm.','keepticks');
-    title('daily ice growth');
+    title('daily ice growth seal 47');
 print('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\seal47icegrowth','-dsvg')
+
+clear rho_0 rho_i S_i S_0 S_f h_0 h_id t h_if XTickVec;
 %% ice formation seal 55
 rho_0=1027; %kg m-3
 rho_i=920; %kg m-3
@@ -266,7 +268,7 @@ plot(date55(1:length(date55)-30),h_if); %daily ice growth (difference between da
     title('seal47 - daily ice growth as difference between time frame t and t+30');
     set(gca,'XTick',XTickVec);
     datetick('x','dd.mm.','keepticks');
-
+clear rho_0 rho_i S_i S_0 S_f h_0 XTickVec t h_if;
 %% ice formation seal 99
 
 rho_0=1027; %kg m-3
@@ -289,8 +291,7 @@ plot(date99(1:length(date99)-30),h_if); %daily ice growth (difference between da
     title('seal99 - daily ice growth as difference between time frame t and t+30');
     set(gca,'XTick',XTickVec);
     datetick('x','dd.mm.','keepticks');
-clear rho_0 rho_i S_i S_0 S_f h_0
-    
+clear rho_0 rho_i S_i S_0 S_f h_0 XTickVec t h_if;    
 %% mixed layer depth
 % Seal data project MAR440 HT-18 Eleonora Van Sitteren Group 2 
 Z_matrix = zeros(length(depth47),length(lon47));
@@ -380,6 +381,7 @@ set(gca, 'ydir', 'reverse');
     set(gca,'XTick',XTickVec);
     datetick('x','dd.mm.','keepticks');
 print('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\mixedlayer','-dsvg');
+clear dp dsig dz g h i l info K LAT_matrix LAT_row N2 o P PTEMP sig SPV ssp SterAn Y Z_matrix; 
 %% potential density
 d0_47=sw_dens0(sal47,temp47);
 contourf(date47,depth47,d0_47, 1027:0.05:1028);
@@ -399,6 +401,7 @@ for t=1:length(lon47)
            end 
    end 
 end
+
 XTickVec=[datenum(2008,2,4),datenum(2008,3:9,1),datenum(2008,9,23)];
 plot(date47,ml47); % mixed layer depth
 set(gca, 'ydir', 'reverse');
@@ -409,6 +412,17 @@ set(gca, 'ydir', 'reverse');
     datetick('x','dd.mm.','keepticks');
 print('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\mixedlayer_dens0','-dsvg');
 
+contourf(date47,depth47,d0_47-d0_47(3,:), -0.1:0.2:1);
+set(gca, 'ydir', 'reverse');
+    colorbar;
+    ylabel('depth [m]');
+    xlabel('day of year');
+    title('seal47');
+    set(gca,'XTick',XTickVec);
+    datetick('x','dd.mm.','keepticks');
+print('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\dens0_diff','-dsvg');
+
+clear t l c ans u;
 %% ice formation with ML depth... V_0 replaced with mixed layer depth
 %seal 47
 rho_0=1027;     %kg m-3
@@ -435,7 +449,7 @@ plot(date47(1:length(date47)-30),h_if); %daily ice growth (difference between da
     set(gca,'XTick',XTickVec);
     datetick('x','dd.mm.','keepticks');
     
-clear rho_0 rho_i S_i S_0 S_f h_0
+clear rho_0 rho_i S_i S_0 S_f h_0 t I
 
 
 %% static zone
@@ -450,12 +464,13 @@ contourf(date47(219:400),depth47,d0_47(:,219:400),1027:0.05:1028);
     colormap jet;
     c=colorbar;
     ylabel(c,'potential density [kg m-3');
-    title('seal47');
+    title('seal47 sal in static zone, red line = most static zone');
     set(gca,'XTick',XTickVec);
     datetick('x','dd.mm.','keepticks');
-hold;
+hold on;
 plot(date47(219:400),ml47(219:400),'color','r');
-
+hold off;
+close;
 %% smooth
 sal47s=smooth2a(sal47,1 ,100); %entered matrix, number of rows, number of columns
 subplot(1,2,1);
@@ -491,10 +506,56 @@ plot(date47(1:length(date47)-30),h_if); %daily ice growth (difference between da
     datetick('x','dd.mm.','keepticks');
     title('daily ice growth');
 
-clear rho_0 rho_i h_0
+clear rho_0 rho_i h_0 S_0 S_f S_i t c
 
+%% better smoothing (press data into one day)
+clear sal47s2
+sal47t=transpose(sal47);
+for t=1:length(depth47)
+   tt=timetable(d47,sal47t(:,t));
+    tt=retime(tt,'daily', 'mean');  
+    tt=timetable2table(tt); %row 1: time row 2: salinity at depth t
+    timen47=tt(:,1); %new date format showing each day with data once
+    tt(:,1)=[]; %delete time column out of table
+    tt=table2array(tt); %transform sal table (1x57) to sal array (1x57)
+    sal47s2(t,:)=tt; %add sal column to a new array sal47s2
+end  
+XTickVec=[datenum(2008,2,4),datenum(2008,3:9,1),datenum(2008,9,23)];
+timen47=table2array(timen47);
+time47=datenum(timen47);
+contourf(timen47,depth47,sal47s2, 33.8:0.2:35.5);
+    set(gca, 'ydir', 'reverse');
+    ylabel('depth [m]');
+    xlabel('day of year');
+    colormap jet;
+    c=colorbar;
+    ylabel(c,'salinity [psu]');
+    title('seal47 mean value at each day');
+    set(gca,'XTick',XTickVec);
+    datetick('x','dd.mm.','keepticks');
+print('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\seal47salinitytimesmoothday','-dsvg');
+
+    datetick('x','dd.mm.','keepticks');
+clear t;
+%% ice growth smoothed
+
+ ig47=ice_growth(35,20,30);
+
+rho_0=1027; %density of water [kg m-3]
+rho_i=920;  %density of ice [kg m-3]
+S_i=10;      %Salinity of ice [psu] [Martin S, Kauffman P (1981) A field and laboratory study of wave damping by greaseice. J Glaciol 27:283�313]
+h0=100;
+for t=1:(length(time47)-1)
+        S_0=sum(sal47s2(3:21,t));
+        S_f=sum(sal47s2(3:21,t+1));
+        ice_growth(t) = ((rho_0*h0*S_0-rho_0*h0*S_f)/(rho_i*S_i-rho_0*S_f))/(datenum(timen47(t+1))-datenum(timen47(t)));
+end
+
+plot(timen47(1:length(ice_growth)),ice_growth);
+figure(1);
+plot(timen47(1:length(ice_growth)),smooth2a(ice_growth,1,8));
+title('blub');
 %% to do
-% interpolate data
+% function ice growth rate
 % overlay map with lat/lon data
 % Sea ice modelling(FESOM) [Timmermann R, Danilov S, Schröter JA (2006) Geophys Res Abstr 8:07063]
-% When calculating Ice growth NaN is treated as zeroes
