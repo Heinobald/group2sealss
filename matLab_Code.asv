@@ -10,7 +10,12 @@ lon47 = LON;
 sal47 = SAL;
 temp47 = TEMP;
 depth47 = Z;
+
 load('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\rawdata\SIConc_Seals');
+si47=SI_47;
+si55=SI_55;
+si99=SI_99;
+
 
 load('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\rawdata\seal_55.mat');
 date55 = DATE;
@@ -28,7 +33,7 @@ sal99 = SAL;
 temp99 = TEMP;
 depth99 = Z;
 
-clear DATE LON LAT SAL TEMP Z info;
+clear DATE LON LAT SAL TEMP Z info SI_47 SI_55 SI_99;
 %end import
 %% date conversion
 day47=date47-datenum(2008,2,4);
@@ -293,96 +298,96 @@ plot(date99(1:length(date99)-30),h_if); %daily ice growth (difference between da
     set(gca,'XTick',XTickVec);
     datetick('x','dd.mm.','keepticks');
 clear rho_0 rho_i S_i S_0 S_f h_0 XTickVec t h_if;    
-%% mixed layer depth
-% Seal data project MAR440 HT-18 Eleonora Van Sitteren Group 2 
-Z_matrix = zeros(length(depth47),length(lon47));
-for i=1:length(lon47)
-Z_matrix (:,i) = depth47;
-end
-
-LAT_row = lat47;
-
-LAT_matrix = zeros (length(47),length(lon47));
-for o=1:length(depth47)
-    LAT_matrix (o,:) = LAT_row;
-end
-
-P = z2p80(Z_matrix,LAT_matrix); %gives the pressure P (dbars) at a depth D (m) at some latitude LAT (degrees).
-
-[SPV,K,SterAn] = alpha(P,temp47,sal47);
-
- PTEMP = theta(P,temp47,sal47); %is the local potential temperature
-       % at reference pressure P0 using Bryden 1973 polynomial for
-       % adiabatic lapse rate and Runge-Kutta fourth order integration
-       % algorithm.
-
-sig = sigma(P,temp47,sal47,1);
-
-%  SIGMA  Density of Seawater
+% %% mixed layer depth
+% % Seal data project MAR440 HT-18 Eleonora Van Sitteren Group 2 
+% Z_matrix = zeros(length(depth47),length(lon47));
+% for i=1:length(lon47)
+% Z_matrix (:,i) = depth47;
+% end
 % 
-%  SIG = SIGMA( P , T , S , [Pref] )
-%     
-%  computation of density of seawater 
-%  referenced to arbitrary pressures 
-%  based on 'alpha.m'
+% LAT_row = lat47;
 % 
-%  input  :    P        : pressure [dbar]
-%         T        : in situ temperature [degC] IPTS-68
-%         S        : salinity [psu]             IPSS-78
-%         Pref    [p]    : optional reference pressure
-%                                  use: SIGMA(Pref,THETA(P,T,S,Pref),S)
+% LAT_matrix = zeros (length(47),length(lon47));
+% for o=1:length(depth47)
+%     LAT_matrix (o,:) = LAT_row;
+% end
 % 
-%  output :    SIG        : density of seawater at pressure P (adiabatic)
-%                   [kg/m^3]
-
-g = gravit (LAT_matrix);
-
-[ssp,info] = snd_spd(P,temp47,sal47,'del grosso',LAT_matrix);
-% 2) SND_SPD(P,T,S,'del grosso',lat) returns the sound speed (m/sec) 
-%             given vectors of salinity (ppt), temperature (deg C), and 
-%             PRESSURE (dbar) using the Del Grosso equation:
+% P = z2p80(Z_matrix,LAT_matrix); %gives the pressure P (dbars) at a depth D (m) at some latitude LAT (degrees).
 % 
-%             Del Grosso, "A New Equation for the speed of sound in Natural
-%             Waters", J. Acoust. Soc. Am. 56#4 (1974).
-
-dsig = diff (sig);
-dz = diff (Z_matrix);
-dp = diff (P);
-
-N2 = (-g(1:length(depth47)-1,:)./sig(1:length(depth47)-1,:)).*(dsig./dz-1./(ssp(1:length(depth47)-1,:).^2).*dp./dz);
-
-[Y,I] = min(N2);
-
-mixed_depth = zeros (1,length(lon47));
-for h=1:length(lon47)
-    mixed_depth (h) = Z_matrix(I(h));
-end
-
-XTickVec=[datenum(2008,2,4),datenum(2008,3:9,1),datenum(2008,9,23)];
-contourf(date47,depth47,sal47, 34:0.2:35.5);
-    set(gca, 'ydir', 'reverse');
-    ylabel('depth [m]');
-    xlabel('day of year');
-    colormap jet;
-    c=colorbar;
-    ylabel(c,'salinity [psu]');
-    title('seal47');
-    set(gca,'XTick',XTickVec);
-    datetick('x','dd.mm.','keepticks');
-hold 
-plot(date47,mixed_depth,'LineWidth',1.5,'color','m');
-print('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\mixedlayer+sal47','-dsvg');
-close
-
-plot(date47,mixed_depth);
-set(gca, 'ydir', 'reverse');
-    ylabel('depth [m]');
-    xlabel('day of year');
-    title('seal47');
-    set(gca,'XTick',XTickVec);
-    datetick('x','dd.mm.','keepticks');
-print('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\mixedlayer','-dsvg');
-clear dp dsig dz g h i l info K LAT_matrix LAT_row N2 o P PTEMP sig SPV ssp SterAn Y Z_matrix; 
+% [SPV,K,SterAn] = alpha(P,temp47,sal47);
+% 
+%  PTEMP = theta(P,temp47,sal47); %is the local potential temperature
+%        % at reference pressure P0 using Bryden 1973 polynomial for
+%        % adiabatic lapse rate and Runge-Kutta fourth order integration
+%        % algorithm.
+% 
+% sig = sigma(P,temp47,sal47,1);
+% 
+% %  SIGMA  Density of Seawater
+% % 
+% %  SIG = SIGMA( P , T , S , [Pref] )
+% %     
+% %  computation of density of seawater 
+% %  referenced to arbitrary pressures 
+% %  based on 'alpha.m'
+% % 
+% %  input  :    P        : pressure [dbar]
+% %         T        : in situ temperature [degC] IPTS-68
+% %         S        : salinity [psu]             IPSS-78
+% %         Pref    [p]    : optional reference pressure
+% %                                  use: SIGMA(Pref,THETA(P,T,S,Pref),S)
+% % 
+% %  output :    SIG        : density of seawater at pressure P (adiabatic)
+% %                   [kg/m^3]
+% 
+% g = gravit (LAT_matrix);
+% 
+% [ssp,info] = snd_spd(P,temp47,sal47,'del grosso',LAT_matrix);
+% % 2) SND_SPD(P,T,S,'del grosso',lat) returns the sound speed (m/sec) 
+% %             given vectors of salinity (ppt), temperature (deg C), and 
+% %             PRESSURE (dbar) using the Del Grosso equation:
+% % 
+% %             Del Grosso, "A New Equation for the speed of sound in Natural
+% %             Waters", J. Acoust. Soc. Am. 56#4 (1974).
+% 
+% dsig = diff (sig);
+% dz = diff (Z_matrix);
+% dp = diff (P);
+% 
+% N2 = (-g(1:length(depth47)-1,:)./sig(1:length(depth47)-1,:)).*(dsig./dz-1./(ssp(1:length(depth47)-1,:).^2).*dp./dz);
+% 
+% [Y,I] = min(N2);
+% 
+% mixed_depth = zeros (1,length(lon47));
+% for h=1:length(lon47)
+%     mixed_depth (h) = Z_matrix(I(h));
+% end
+% 
+% XTickVec=[datenum(2008,2,4),datenum(2008,3:9,1),datenum(2008,9,23)];
+% contourf(date47,depth47,sal47, 34:0.2:35.5);
+%     set(gca, 'ydir', 'reverse');
+%     ylabel('depth [m]');
+%     xlabel('day of year');
+%     colormap jet;
+%     c=colorbar;
+%     ylabel(c,'salinity [psu]');
+%     title('seal47');
+%     set(gca,'XTick',XTickVec);
+%     datetick('x','dd.mm.','keepticks');
+% hold 
+% plot(date47,mixed_depth,'LineWidth',1.5,'color','m');
+% print('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\mixedlayer+sal47','-dsvg');
+% close
+% 
+% plot(date47,mixed_depth);
+% set(gca, 'ydir', 'reverse');
+%     ylabel('depth [m]');
+%     xlabel('day of year');
+%     title('seal47');
+%     set(gca,'XTick',XTickVec);
+%     datetick('x','dd.mm.','keepticks');
+% print('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\mixedlayer','-dsvg');
+% clear dp dsig dz g h i l info K LAT_matrix LAT_row N2 o P PTEMP sig SPV ssp SterAn Y Z_matrix; 
 %% potential density
 d0_47=sw_dens0(sal47,temp47);
 contourf(date47,depth47,d0_47, 1027:0.05:1028);
@@ -510,20 +515,22 @@ plot(date47(1:length(date47)-30),h_if); %daily ice growth (difference between da
 clear rho_0 rho_i h_0 S_0 S_f S_i t c
 
 %% better smoothing (press data into one day)
-clear sal47s2
-sal47t=transpose(sal47);
-for t=1:length(depth47)
-   tt=timetable(d47,sal47t(:,t));
-    tt=retime(tt,'daily', 'mean');  
-    tt=timetable2table(tt); %row 1: time row 2: salinity at depth t
-    timen47=tt(:,1); %new date format showing each day with data once
-    tt(:,1)=[]; %delete time column out of table
-    tt=table2array(tt); %transform sal table (1x57) to sal array (1x57)
-    sal47s2(t,:)=tt; %add sal column to a new array sal47s2
-end  
-XTickVec=[datenum(2008,2,4),datenum(2008,3:9,1),datenum(2008,9,23)];
-timen47=table2array(timen47);
-time47=datenum(timen47);
+%   -----FUNCTION SMOOTHDAY ----
+% sal47t=transpose(sal47);
+% for t=1:length(depth47)
+%    tt=timetable(d47,sal47t(:,t));
+%     tt=retime(tt,'daily', 'mean');  
+%     tt=timetable2table(tt); %row 1: time row 2: salinity at depth t
+%     timen47=tt(:,1); %new date format showing each day with data once
+%     tt(:,1)=[]; %delete time column out of table
+%     tt=table2array(tt); %transform sal table (1x57) to sal array (1x57)
+%     sal47s2(t,:)=tt; %add sal column to a new array sal47s2
+% end  
+% XTickVec=[datenum(2008,2,4),datenum(2008,3:9,1),datenum(2008,9,23)];
+% timen47=table2array(timen47);
+% time47=datenum(timen47);
+% -------------------
+[sal47s2,time47]=smoothday(sal47,depth47,date47);
 contourf(time47,depth47,sal47s2, 33.8:0.2:35.5);
     set(gca, 'ydir', 'reverse');
     ylabel('depth [m]');
@@ -535,9 +542,8 @@ contourf(time47,depth47,sal47s2, 33.8:0.2:35.5);
     set(gca,'XTick',XTickVec);
     datetick('x','dd.mm.','keepticks');
 print('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\seal47salinitytimesmoothday','-dsvg');
-
 clear t;
-%% ice growth smoothed
+%% ice growth smoothed 47
 close;
  ig47=ice_growth(sal47s2,time47,1); %call function ice_growth 
 subplot(2,2,1);
@@ -597,6 +603,18 @@ set(gcf, 'Position', get(0, 'Screensize'));
     
 sum(ig47(65:117)); % ice growth from 4.4. to 30.5. (stable period)
 
+%% ice concentration
+figure(2);
+[si47s,time47]=smoothday(si47,1,date47);
+plot(time47, si47s);   
+    ylabel('sea ice concentration');
+    xlabel('day of year');  
+    line([time47(65) time47(65)], [0 1], 'color','black', 'LineWidth', 2);
+    line([time47(117) time47(117)], [0 1], 'color','black', 'LineWidth', 2);
+    set(gcf,'position',[100 100 900 300])   
+%     title('Sum of salinity');
+    set(gca,'XTick',XTickVec);
+    datetick('x','dd.mm.','keepticks');
 
 %% to do
 % function ice growth rate

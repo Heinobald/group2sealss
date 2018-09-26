@@ -1,4 +1,4 @@
-function [output1,output2] = smoothday(variable, depth, d)
+function [output1,output2] = smoothday(variable, depth, time)
 %   Builds mean of variable for every day 
 %   variable(depth, time)
 %   depth
@@ -6,7 +6,7 @@ function [output1,output2] = smoothday(variable, depth, d)
 %   output1 = smoothed variable
 %   output2 = smoothed time (as array)
 temp=transpose(variable); %time needs to be in y direction
-d=datetime(d, 'ConvertFrom', 'datenum'); %timetable function needs datetime format
+d=datetime(time, 'ConvertFrom', 'datenum'); %timetable function needs datetime format
 
 for t=1:length(depth)
    tt=timetable(d,temp(:,t));
