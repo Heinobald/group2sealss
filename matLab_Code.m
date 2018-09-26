@@ -11,6 +11,12 @@ sal47 = SAL;
 temp47 = TEMP;
 depth47 = Z;
 
+load('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\rawdata\SIConc_Seals');
+si47=SI_47;
+si55=SI_55;
+si99=SI_99;
+
+
 load('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\rawdata\seal_55.mat');
 date55 = DATE;
 lat55 = LAT;
@@ -27,7 +33,7 @@ sal99 = SAL;
 temp99 = TEMP;
 depth99 = Z;
 
-clear DATE LON LAT SAL TEMP Z info;
+clear DATE LON LAT SAL TEMP Z info SI_47 SI_55 SI_99;
 %end import
 %% date conversion
 day47=date47-datenum(2008,2,4);
@@ -509,21 +515,23 @@ plot(date47(1:length(date47)-30),h_if); %daily ice growth (difference between da
 clear rho_0 rho_i h_0 S_0 S_f S_i t c
 
 %% better smoothing (press data into one day)
-clear sal47s2
-sal47t=transpose(sal47);
-for t=1:length(depth47)
-   tt=timetable(d47,sal47t(:,t));
-    tt=retime(tt,'daily', 'mean');  
-    tt=timetable2table(tt); %row 1: time row 2: salinity at depth t
-    timen47=tt(:,1); %new date format showing each day with data once
-    tt(:,1)=[]; %delete time column out of table
-    tt=table2array(tt); %transform sal table (1x57) to sal array (1x57)
-    sal47s2(t,:)=tt; %add sal column to a new array sal47s2
-end  
-XTickVec=[datenum(2008,2,4),datenum(2008,3:9,1),datenum(2008,9,23)];
-timen47=table2array(timen47);
-time47=datenum(timen47);
-contourf(timen47,depth47,sal47s2, 33.8:0.2:35.5);
+%   -----FUNCTION SMOOTHDAY ----
+% sal47t=transpose(sal47);
+% for t=1:length(depth47)
+%    tt=timetable(d47,sal47t(:,t));
+%     tt=retime(tt,'daily', 'mean');  
+%     tt=timetable2table(tt); %row 1: time row 2: salinity at depth t
+%     timen47=tt(:,1); %new date format showing each day with data once
+%     tt(:,1)=[]; %delete time column out of table
+%     tt=table2array(tt); %transform sal table (1x57) to sal array (1x57)
+%     sal47s2(t,:)=tt; %add sal column to a new array sal47s2
+% end  
+% XTickVec=[datenum(2008,2,4),datenum(2008,3:9,1),datenum(2008,9,23)];
+% timen47=table2array(timen47);
+% time47=datenum(timen47);
+% -------------------
+[sal47s2,time47]=smoothday(sal47,depth47,date47);
+contourf(time47,depth47,sal47s2, 33.8:0.2:35.5);
     set(gca, 'ydir', 'reverse');
     ylabel('depth [m]');
     xlabel('day of year');
@@ -534,27 +542,68 @@ contourf(timen47,depth47,sal47s2, 33.8:0.2:35.5);
     set(gca,'XTick',XTickVec);
     datetick('x','dd.mm.','keepticks');
 print('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\seal47salinitytimesmoothday','-dsvg');
-
-    datetick('x','dd.mm.','keepticks');
 clear t;
 %% ice growth smoothed
+close;
+ ig47=ice_growth(sal47s2,time47,1); %call function ice_growth 
+subplot(2,2,1);
+plot(timen47(1:length(ig47)),smooth2a(ig47,1,3));
+    line([timen47(1) timen47(length(timen47))], [0 0], 'color','r');
+    line([timen47(65) timen47(65)], [-0.2 0.2], 'color','r');
+    line([timen47(117) timen47(117)], [-0.2 0.2], 'color','r');
+    ylabel('icegrowth [m/d]');
+    xlabel('day of year');
+    title('ice formation rate ');
+    set(gcf,'position',[100 100 900 300])
+hold;
 
- ig47=ice_growth(35,20,30);
+subplot(2,2,2);
+    XTickVec=datenum(2008,2:10,1);
+contourf(time47,depth47,sal47s2, 34:0.2:35.5);
+    set(gca, 'ydir', 'reverse');
+    ylabel('depth [m]');
+    xlabel('day of year');  
+    line([time47(65) time47(65)], [0 600], 'color','black', 'LineWidth', 2);
+    line([time47(117) time47(117)], [0 600], 'color','black', 'LineWidth', 2);
+    line([time47(1) time47(length(time47))], [100 100]);
+    colormap jet;
+    set(gcf,'position',[100 100 900 300])
+    title('salinity');
+    set(gca,'XTick',XTickVec);
+    datetick('x','dd.mm.','keepticks');
+hold;
 
-rho_0=1027; %density of water [kg m-3]
-rho_i=920;  %density of ice [kg m-3]
-S_i=10;      %Salinity of ice [psu] [Martin S, Kauffman P (1981) A field and laboratory study of wave damping by greaseice. J Glaciol 27:283–313]
-h0=100;
-for t=1:(length(time47)-1)
-        S_0=sum(sal47s2(3:21,t));
-        S_f=sum(sal47s2(3:21,t+1));
-        ice_growth(t) = ((rho_0*h0*S_0-rho_0*h0*S_f)/(rho_i*S_i-rho_0*S_f))/(datenum(timen47(t+1))-datenum(timen47(t)));
-end
+subplot(2,2,3); %sum of salinity in upper 100 m
+plot(time47, nansum(sal47s2(1:21,:)));   
+    ylim([645 660]);
+    ylabel('Sum of salinity in upper 100 m');
+    xlabel('day of year');  
+    line([time47(65) time47(65)], [0 700], 'color','black', 'LineWidth', 2);
+    line([time47(117) time47(117)], [0 700], 'color','black', 'LineWidth', 2);
+    set(gcf,'position',[100 100 900 300])
+    title('Sum of salinity');
+    set(gca,'XTick',XTickVec);
+    datetick('x','dd.mm.','keepticks');
+    
+subplot(2,2,4); %sealpath
+scatter(lon47,lat47,5,day47);
+    title('seal 47 path');
+    xlabel('Longitude');
+    ylabel('Latitude');
+    h47=colorbar;
+    ylabel(h47,'days of year');
+    colormap jet;
+    line([30 36], [-69 -69]);
+    line([30 30], [-69 -64]);
+    line([30 36], [-64 -64]);
+    line([36 36], [-69 -64]);
+set(gcf, 'Position', get(0, 'Screensize'));
 
-plot(timen47(1:length(ice_growth)),ice_growth);
-figure(1);
-plot(timen47(1:length(ice_growth)),smooth2a(ice_growth,1,8));
-title('blub');
+
+    
+sum(ig47(65:117)); % ice growth from 4.4. to 30.5. (stable period)
+
+
 %% to do
 % function ice growth rate
 % overlay map with lat/lon data
