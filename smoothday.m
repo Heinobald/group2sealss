@@ -1,4 +1,4 @@
-function [output1,output2] = smoothday(variable, depth, time)
+function [output1,output2, output3] = smoothday(variable, depth, time)
 %   Builds mean of variable for every day 
 %   variable(depth, time)
 %   depth
@@ -17,7 +17,7 @@ for t=1:length(depth)
     tt=table2array(tt); %transform sal table (1x:) to sal array (1x:)
     output1(t,:)=tt; %add sal column to a new array sal47s2
 end  
-timen=table2array(timen);
-output2=datenum(timen); %gives the time as datenum
+output3=table2array(timen);
+output2=datenum(output3); %gives the time as datenum
 end
 

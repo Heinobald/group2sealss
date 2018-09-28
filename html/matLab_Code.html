@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>matLab_Code</title><meta name="generator" content="MATLAB 9.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-09-24"><meta name="DC.source" content="matLab_Code.m"><style type="text/css">
+      --><title>matLab_Code</title><meta name="generator" content="MATLAB 9.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-09-26"><meta name="DC.source" content="matLab_Code.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,36 +66,42 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">date conversion</a></li><li><a href="#3">video of seal path</a></li><li><a href="#4">path of seals</a></li><li><a href="#5">salinity</a></li><li><a href="#6">temperature</a></li><li><a href="#7">p color plots</a></li><li><a href="#8">time frame when seal stayed in one place</a></li><li><a href="#9">ice formation rate</a></li><li><a href="#10">ice formation seal 55</a></li><li><a href="#11">ice formation seal 99</a></li><li><a href="#12">mixed layer depth</a></li><li><a href="#13">potential density</a></li><li><a href="#14">ice formation with ML depth... V_0 replaced with mixed layer depth</a></li><li><a href="#15">static zone</a></li><li><a href="#16">smooth</a></li><li><a href="#17">to do</a></li></ul></div><pre class="codeinput"><span class="comment">% group project "Seal data"</span>
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">date conversion</a></li><li><a href="#3">video of seal path</a></li><li><a href="#4">path of seals</a></li><li><a href="#5">salinity</a></li><li><a href="#6">temperature</a></li><li><a href="#7">p color plots</a></li><li><a href="#8">time frame when seal stayed in one place</a></li><li><a href="#9">ice formation rate</a></li><li><a href="#10">ice formation seal 55</a></li><li><a href="#11">ice formation seal 99</a></li><li><a href="#12">mixed layer depth</a></li><li><a href="#13">potential density</a></li><li><a href="#14">static zone</a></li><li><a href="#15">smooth</a></li><li><a href="#16">better smoothing (press data into one day)</a></li><li><a href="#17">ice growth smoothed 47 area 1</a></li><li><a href="#18">ice concentration</a></li><li><a href="#19">ice growth smoothed 47 area 2</a></li><li><a href="#20">ice growth smoothed 55 area 1</a></li><li><a href="#21">ice growth smoothed x time y</a></li><li><a href="#22">clear some stuff</a></li><li><a href="#23">to do</a></li></ul></div><pre class="codeinput"><span class="comment">% group project "Seal data"</span>
 <span class="comment">% Group 2: Heiner Schmidt, Martin Mohrmann, Eleonora van Sitteren</span>
 <span class="comment">% script Heiner</span>
 
 <span class="comment">%import files</span>
 load(<span class="string">'C:\Users\Heiner\Desktop\Marine Project\BOX1_project\rawdata\seal_47.mat'</span>);
 date47 = DATE;
-lat47=LAT;
-lon47=LON;
-sal47=SAL;
-temp47=TEMP;
-depth47=Z;
+lat47 = LAT;
+lon47 = LON;
+sal47 = SAL;
+temp47 = TEMP;
+depth47 = Z;
+
+load(<span class="string">'C:\Users\Heiner\Desktop\Marine Project\BOX1_project\rawdata\SIConc_Seals'</span>);
+si47=SI_47;
+si55=SI_55;
+si99=SI_99;
+
 
 load(<span class="string">'C:\Users\Heiner\Desktop\Marine Project\BOX1_project\rawdata\seal_55.mat'</span>);
 date55 = DATE;
-lat55=LAT;
-lon55=LON;
-sal55=SAL;
-temp55=TEMP;
-depth55=Z;
+lat55 = LAT;
+lon55 = LON;
+sal55 = SAL;
+temp55 = TEMP;
+depth55 = Z;
 
 load(<span class="string">'C:\Users\Heiner\Desktop\Marine Project\BOX1_project\rawdata\seal_99.mat'</span>);
-date99=DATE;
-lat99=LAT;
-lon99=LON;
-sal99=SAL;
-temp99=TEMP;
-depth99=Z;
+date99 = DATE;
+lat99 = LAT;
+lon99 = LON;
+sal99 = SAL;
+temp99 = TEMP;
+depth99 = Z;
 
-clear <span class="string">DATE</span> <span class="string">LON</span> <span class="string">LAT</span> <span class="string">SAL</span> <span class="string">TEMP</span> <span class="string">Z</span>;
+clear <span class="string">DATE</span> <span class="string">LON</span> <span class="string">LAT</span> <span class="string">SAL</span> <span class="string">TEMP</span> <span class="string">Z</span> <span class="string">info</span> <span class="string">SI_47</span> <span class="string">SI_55</span> <span class="string">SI_99</span>;
 <span class="comment">%end import</span>
 </pre><h2 id="2">date conversion</h2><pre class="codeinput">day47=date47-datenum(2008,2,4);
 day55=date55-datenum(2008,2,7);
@@ -103,7 +109,53 @@ day99=date99-datenum(2008,2,5);
 d47=datetime(date47, <span class="string">'ConvertFrom'</span>, <span class="string">'datenum'</span>);
 d55=datetime(date55, <span class="string">'ConvertFrom'</span>, <span class="string">'datenum'</span>);
 d99=datetime(date99, <span class="string">'ConvertFrom'</span>, <span class="string">'datenum'</span>);
-</pre><h2 id="3">video of seal path</h2><p>v=VideoWriter('sealpath.avi'); v.FrameRate=10; open(v); t=1; for t=1:length(lon47);     scatter(lon47(t),lat47(t));         xlabel('Longitude');         ylabel('Latidude');         zlabel('Depth');         xlim([-5 40]);         ylim([-70 -54]);     frame=getframe(gcf);     writeVideo(v,frame); end close(v); scatter(lon47,lat47, lon55,lat55,lon99,lat99); %path of the seals legend('seal47','seal55','seal99'); title('Seal path');</p><h2 id="4">path of seals</h2><pre class="codeinput">scatter(lon47,lat47,5,day47);
+</pre><h2 id="3">video of seal path</h2><p>salinity and temp at 10m depth</p><pre class="codeinput">close;
+figure(1);
+scatter(lon47,lat47,5,temp47(3,:));
+hold;
+scatter(lon55,lat55,5,temp55(3,:));
+hold <span class="string">on</span>;
+scatter(lon99,lat99,5,temp99(3,:));
+    xlabel(<span class="string">'Longitude'</span>);
+    ylabel(<span class="string">'Latidude'</span>);
+    colorbar;
+    title(<span class="string">'Temp all seals'</span>);
+print(<span class="string">'C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\tempallseals'</span>, <span class="string">'-dsvg'</span>);
+close;
+
+figure(1);
+scatter(lon47,lat47,5,sal47(3,:));
+hold <span class="string">on</span>;
+scatter(lon55,lat55,5,sal55(3,:));
+hold <span class="string">on</span>;
+scatter(lon99,lat99,5,sal99(3,:));
+    xlabel(<span class="string">'Longitude'</span>);
+    ylabel(<span class="string">'Latidude'</span>);
+    colorbar;
+    caxis([34 34.6]);
+    title(<span class="string">'salinity of all seals'</span>);
+print(<span class="string">'C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\salallseals'</span>, <span class="string">'-dsvg'</span>);
+
+<span class="comment">% v=VideoWriter('sealpath.avi');</span>
+<span class="comment">% v.FrameRate=10;</span>
+<span class="comment">% open(v);</span>
+<span class="comment">% t=1;</span>
+<span class="comment">% for t=1:length(lon47);</span>
+<span class="comment">%     scatter(lon47(t),lat47(t));</span>
+<span class="comment">%         xlabel('Longitude');</span>
+<span class="comment">%         ylabel('Latidude');</span>
+<span class="comment">%         zlabel('Depth');</span>
+<span class="comment">%         xlim([-5 40]);</span>
+<span class="comment">%         ylim([-70 -54]);</span>
+<span class="comment">%     frame=getframe(gcf);</span>
+<span class="comment">%     writeVideo(v,frame);</span>
+<span class="comment">% end</span>
+<span class="comment">% close(v);</span>
+<span class="comment">% scatter(lon47,lat47, lon55,lat55,lon99,lat99); %path of the seals</span>
+<span class="comment">% legend('seal47','seal55','seal99');</span>
+<span class="comment">% title('Seal path');</span>
+</pre><pre class="codeoutput">Current plot released
+</pre><img vspace="5" hspace="5" src="matLab_Code_01.png" alt=""> <h2 id="4">path of seals</h2><pre class="codeinput">scatter(lon47,lat47,5,day47);
     title(<span class="string">'seal 47 path'</span>);
     xlabel(<span class="string">'Longitude'</span>);
     ylabel(<span class="string">'Latitude'</span>);
@@ -139,7 +191,7 @@ scatter(lon99,lat99,5,day99);
     ylabel(h99,<span class="string">'days of year'</span>);
     colormap <span class="string">hsv</span>;
 print(<span class="string">'C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\seal99path'</span>,<span class="string">'-dsvg'</span>);
-</pre><img vspace="5" hspace="5" src="matLab_Code_01.png" alt=""> <h2 id="5">salinity</h2><pre class="codeinput">XTickVec=[datenum(2008,2,4),datenum(2008,3:9,1),datenum(2008,9,23)];
+</pre><img vspace="5" hspace="5" src="matLab_Code_02.png" alt=""> <h2 id="5">salinity</h2><pre class="codeinput">XTickVec=[datenum(2008,2,4),datenum(2008,3:9,1),datenum(2008,9,23)];
 contourf(date47,depth47,sal47, 34:0.2:35.5);
     set(gca, <span class="string">'ydir'</span>, <span class="string">'reverse'</span>);
     ylabel(<span class="string">'depth [m]'</span>);
@@ -166,7 +218,7 @@ contourf(date55,depth55,sal55, 34:0.2:35.5);
 print(<span class="string">'C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\seal55salinitytime'</span>,<span class="string">'-dsvg'</span>);
 
 XTickVec=[datenum(2008,2,5),datenum(2008,3:10,1),datenum(2008,11,17)];
-contourf(date99,depth99,sal99, 34:0.2:35.5);
+contourf(date99,depth99,sal99, 33:0.2:37);
     set(gca, <span class="string">'ydir'</span>, <span class="string">'reverse'</span>);
     ylabel(<span class="string">'depth [m]'</span>);
     xlabel(<span class="string">'day of year'</span>);
@@ -177,7 +229,7 @@ contourf(date99,depth99,sal99, 34:0.2:35.5);
     set(gca,<span class="string">'XTick'</span>,XTickVec);
     datetick(<span class="string">'x'</span>,<span class="string">'dd.mm.'</span>,<span class="string">'keepticks'</span>);
 print(<span class="string">'C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\seal99salinitytime'</span>,<span class="string">'-dsvg'</span>);
-</pre><img vspace="5" hspace="5" src="matLab_Code_02.png" alt=""> <h2 id="6">temperature</h2><pre class="codeinput">XTickVec=[datenum(2008,2,4),datenum(2008,3:9,1),datenum(2008,9,23)];
+</pre><img vspace="5" hspace="5" src="matLab_Code_03.png" alt=""> <h2 id="6">temperature</h2><pre class="codeinput">XTickVec=[datenum(2008,2,4),datenum(2008,3:9,1),datenum(2008,9,23)];
 [~,c]=contourf(date47,depth47,temp47, -2:0.5:2);
     set(gca, <span class="string">'ydir'</span>, <span class="string">'reverse'</span>);
     ylabel(<span class="string">'depth [m]'</span>);
@@ -185,7 +237,7 @@ print(<span class="string">'C:\Users\Heiner\Desktop\Marine Project\BOX1_project\
     colormap <span class="string">jet</span>;
     c.LineWidth=0.1;
     c=colorbar;
-    ylabel(c,<span class="string">'temp [&deg;C]'</span>);
+    ylabel(c,<span class="string">'temp [&Acirc;&deg;C]'</span>);
     title(<span class="string">'seal47'</span>);
     set(gca,<span class="string">'XTick'</span>,XTickVec);
     datetick(<span class="string">'x'</span>,<span class="string">'dd.mm.'</span>,<span class="string">'keepticks'</span>);
@@ -199,33 +251,34 @@ XTickVec=[datenum(2008,2,7),datenum(2008,3:10,1),datenum(2008,11,11)];
     colormap <span class="string">jet</span>;
     c.LineWidth=0.1;
     c=colorbar;
-    ylabel(c,<span class="string">'temp [&deg;C]'</span>);
+    ylabel(c,<span class="string">'temp [&Acirc;&deg;C]'</span>);
     title(<span class="string">'seal55'</span>);
     set(gca,<span class="string">'XTick'</span>,XTickVec);
     datetick(<span class="string">'x'</span>,<span class="string">'dd.mm.'</span>,<span class="string">'keepticks'</span>);
 print(<span class="string">'C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\seal55temptime'</span>,<span class="string">'-dsvg'</span>);
 
 XTickVec=[datenum(2008,2,5),datenum(2008,3:10,1),datenum(2008,11,17)];
-[m,c]=contourf(date99,depth99,temp99, -2:0.5:2);
+[~,c]=contourf(date99,depth99,temp99, -2:0.5:2);
     set(gca, <span class="string">'ydir'</span>, <span class="string">'reverse'</span>);
     ylabel(<span class="string">'depth [m]'</span>);
     xlabel(<span class="string">'day of year'</span>);
     colormap <span class="string">jet</span>;
     c.LineWidth=0.1;
     c=colorbar;
-    ylabel(c,<span class="string">'temp [&deg;C]'</span>);
+    ylabel(c,<span class="string">'temp [&Acirc;&deg;C]'</span>);
     title(<span class="string">'seal99'</span>);
     set(gca,<span class="string">'XTick'</span>,XTickVec);
     datetick(<span class="string">'x'</span>,<span class="string">'dd.mm.'</span>,<span class="string">'keepticks'</span>);
 print(<span class="string">'C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\seal99temptime'</span>,<span class="string">'-dsvg'</span>);
-</pre><img vspace="5" hspace="5" src="matLab_Code_03.png" alt=""> <h2 id="7">p color plots</h2><pre class="codeinput">pcolor(day47,depth47,temp47);
+clear <span class="string">m</span> <span class="string">h47</span> <span class="string">h55</span> <span class="string">h99</span> <span class="string">c</span> <span class="string">XTickVec</span>;
+</pre><img vspace="5" hspace="5" src="matLab_Code_04.png" alt=""> <h2 id="7">p color plots</h2><pre class="codeinput">pcolor(day47,depth47,temp47);
     shading <span class="string">interp</span>;
     set(gca, <span class="string">'ydir'</span>, <span class="string">'reverse'</span>);
     ylabel(<span class="string">'depth [m]'</span>);
     xlabel(<span class="string">'day of year'</span>);
     title(<span class="string">'seal47'</span>);
     c=colorbar;
-    ylabel(c,<span class="string">'temperature [&deg;C]'</span>);
+    ylabel(c,<span class="string">'temperature [&Acirc;&deg;C]'</span>);
 
 pcolor(day55,depth55,temp55);
     shading <span class="string">interp</span>;
@@ -234,7 +287,7 @@ pcolor(day55,depth55,temp55);
     xlabel(<span class="string">'day of year'</span>);
     title(<span class="string">'seal55'</span>);
     c=colorbar;
-    ylabel(c,<span class="string">'temperature [&deg;C]'</span>);
+    ylabel(c,<span class="string">'temperature [&Acirc;&deg;C]'</span>);
 
 pcolor(day99,depth99,temp99);
     shading <span class="string">interp</span>;
@@ -243,25 +296,27 @@ pcolor(day99,depth99,temp99);
     xlabel(<span class="string">'day of year'</span>);
     title(<span class="string">'seal99'</span>);
     c=colorbar;
-    ylabel(c,<span class="string">'temperature [&deg;C]'</span>);
-</pre><img vspace="5" hspace="5" src="matLab_Code_04.png" alt=""> <h2 id="8">time frame when seal stayed in one place</h2><pre class="codeinput"><span class="comment">%seal 47 start 98.24 end: 150.38</span>
+    ylabel(c,<span class="string">'temperature [&Acirc;&deg;C]'</span>);
+clear <span class="string">c</span>;
+</pre><img vspace="5" hspace="5" src="matLab_Code_05.png" alt=""> <h2 id="8">time frame when seal stayed in one place</h2><pre class="codeinput"><span class="comment">%seal 47 start 98.24 end: 150.38</span>
 day47(219);
 day47(400);
 <span class="comment">%seal 55 start: 143.61 end: 210.67</span>
 day55(355);
-day55(565);
+day55(562);
 <span class="comment">%seal 99 start 35.17 end: 275.56</span>
 day99(1);
 day99(665);
+clear <span class="string">ans</span>;
 </pre><h2 id="9">ice formation rate</h2><pre class="codeinput"><span class="comment">%seal 47</span>
 rho_0=1027; <span class="comment">%kg m-3</span>
 rho_i=920; <span class="comment">%kg m-3</span>
 S_i=10;      <span class="comment">%psu</span>
 h_0=100;     <span class="comment">%m</span>
-S_0=sum(sal47(3:21,250:260)); <span class="comment">%salinity from date250 to date350</span>
-S_f=sum(sal47(3:21,350:360));
-h_i = (rho_0*h_0*S_0-rho_0*h_0*S_f)/(rho_i*S_i-rho_0*S_f); <span class="comment">%net ice formation rate over the time frame</span>
-h_id = h_i/(date47(350)-date47(250)); <span class="comment">%ice formation rate by day</span>
+<span class="comment">% S_0=sum(sal47(3:21,250:260)); %salinity from date250 to date350</span>
+<span class="comment">% S_f=sum(sal47(3:21,350:360));</span>
+<span class="comment">% h_i = (rho_0*h_0*S_0-rho_0*h_0*S_f)/(rho_i*S_i-rho_0*S_f); %net ice formation rate over the time frame</span>
+<span class="comment">% h_id = h_i/(date47(350)-date47(250)); %ice formation rate by day</span>
 clear <span class="string">h_if</span>
 h_if=zeros(1,length(lon47)-30);
 <span class="keyword">for</span> t=1:(length(date47)-30)
@@ -277,13 +332,16 @@ plot(date47(1:length(date47)-30),h_if); <span class="comment">%daily ice growth 
     xlabel(<span class="string">'day of year'</span>);
     set(gca,<span class="string">'XTick'</span>,XTickVec);
     datetick(<span class="string">'x'</span>,<span class="string">'dd.mm.'</span>,<span class="string">'keepticks'</span>);
-    title(<span class="string">'daily ice growth'</span>);
+    title(<span class="string">'daily ice growth seal 47'</span>);
 print(<span class="string">'C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\seal47icegrowth'</span>,<span class="string">'-dsvg'</span>)
-</pre><img vspace="5" hspace="5" src="matLab_Code_05.png" alt=""> <h2 id="10">ice formation seal 55</h2><pre class="codeinput">rho_0=1027; <span class="comment">%kg m-3</span>
+
+clear <span class="string">rho_0</span> <span class="string">rho_i</span> <span class="string">S_i</span> <span class="string">S_0</span> <span class="string">S_f</span> <span class="string">h_0</span> <span class="string">h_id</span> <span class="string">t</span> <span class="string">h_if</span> <span class="string">XTickVec</span>;
+</pre><img vspace="5" hspace="5" src="matLab_Code_06.png" alt=""> <h2 id="10">ice formation seal 55</h2><pre class="codeinput">rho_0=1027; <span class="comment">%kg m-3</span>
 rho_i=920; <span class="comment">%kg m-3</span>
 S_i=10;      <span class="comment">%psu</span>
 h_0=100;     <span class="comment">%m</span>
 clear <span class="string">h_if</span>
+h_if=zeros(1,length(lon55)-30);
 <span class="keyword">for</span> t=1:(length(date55)-30)
     S_0=sum(sal55(3:21,t));
     S_f=sum(sal55(3:21,t+30));
@@ -301,11 +359,17 @@ plot(date55(1:length(date55)-30),h_if); <span class="comment">%daily ice growth 
     title(<span class="string">'seal47 - daily ice growth as difference between time frame t and t+30'</span>);
     set(gca,<span class="string">'XTick'</span>,XTickVec);
     datetick(<span class="string">'x'</span>,<span class="string">'dd.mm.'</span>,<span class="string">'keepticks'</span>);
-</pre><img vspace="5" hspace="5" src="matLab_Code_06.png" alt=""> <h2 id="11">ice formation seal 99</h2><pre class="codeinput">rho_0=1027; <span class="comment">%kg m-3</span>
+print(<span class="string">'C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\seal55icegrowth'</span>,<span class="string">'-dsvg'</span>)
+
+
+
+clear <span class="string">rho_0</span> <span class="string">rho_i</span> <span class="string">S_i</span> <span class="string">S_0</span> <span class="string">S_f</span> <span class="string">h_0</span> <span class="string">XTickVec</span> <span class="string">t</span> <span class="string">h_if</span>;
+</pre><img vspace="5" hspace="5" src="matLab_Code_07.png" alt=""> <h2 id="11">ice formation seal 99</h2><pre class="codeinput">rho_0=1027; <span class="comment">%kg m-3</span>
 rho_i=920; <span class="comment">%kg m-3</span>
 S_i=10;      <span class="comment">%psu</span>
 h_0=100;     <span class="comment">%m</span>
 clear <span class="string">h_if</span>
+h_if=zeros(1,length(lon99)-30);
 <span class="keyword">for</span> t=1:(length(date99)-30)
     S_0=sum(sal99(3:21,t));
     S_f=sum(sal99(3:21,t+30));
@@ -320,98 +384,15 @@ plot(date99(1:length(date99)-30),h_if); <span class="comment">%daily ice growth 
     title(<span class="string">'seal99 - daily ice growth as difference between time frame t and t+30'</span>);
     set(gca,<span class="string">'XTick'</span>,XTickVec);
     datetick(<span class="string">'x'</span>,<span class="string">'dd.mm.'</span>,<span class="string">'keepticks'</span>);
-clear <span class="string">rho_0</span> <span class="string">rho_i</span> <span class="string">S_i</span> <span class="string">S_0</span> <span class="string">S_f</span> <span class="string">h_0</span>
-</pre><img vspace="5" hspace="5" src="matLab_Code_07.png" alt=""> <h2 id="12">mixed layer depth</h2><p>Seal data project MAR440 HT-18 Eleonora Van Sitteren Group 2</p><pre class="codeinput">Z_matrix = zeros(length(depth47),length(lon47));
-<span class="keyword">for</span> i=1:length(lon47)
-Z_matrix (:,i) = depth47;
-<span class="keyword">end</span>
-
-LAT_row = lat47;
-
-LAT_matrix = zeros (length(47),length(lon47));
-<span class="keyword">for</span> o=1:length(depth47)
-    LAT_matrix (o,:) = LAT_row;
-<span class="keyword">end</span>
-
-P = z2p80(Z_matrix,LAT_matrix); <span class="comment">%gives the pressure P (dbars) at a depth D (m) at some latitude LAT (degrees).</span>
-
-[SPV,K,SterAn] = alpha(P,temp47,sal47);
-
- PTEMP = theta(P,temp47,sal47); <span class="comment">%is the local potential temperature</span>
-       <span class="comment">% at reference pressure P0 using Bryden 1973 polynomial for</span>
-       <span class="comment">% adiabatic lapse rate and Runge-Kutta fourth order integration</span>
-       <span class="comment">% algorithm.</span>
-
-sig = sigma(P,temp47,sal47,1);
-
-<span class="comment">%  SIGMA  Density of Seawater</span>
-<span class="comment">%</span>
-<span class="comment">%  SIG = SIGMA( P , T , S , [Pref] )</span>
-<span class="comment">%</span>
-<span class="comment">%  computation of density of seawater</span>
-<span class="comment">%  referenced to arbitrary pressures</span>
-<span class="comment">%  based on 'alpha.m'</span>
-<span class="comment">%</span>
-<span class="comment">%  input  :    P        : pressure [dbar]</span>
-<span class="comment">%         T        : in situ temperature [degC] IPTS-68</span>
-<span class="comment">%         S        : salinity [psu]             IPSS-78</span>
-<span class="comment">%         Pref    [p]    : optional reference pressure</span>
-<span class="comment">%                                  use: SIGMA(Pref,THETA(P,T,S,Pref),S)</span>
-<span class="comment">%</span>
-<span class="comment">%  output :    SIG        : density of seawater at pressure P (adiabatic)</span>
-<span class="comment">%                   [kg/m^3]</span>
-
-t = datestr(date47); <span class="comment">% makes dates in characters out of the MATLAb format dates in DATE.</span>
-
-g = gravit (LAT_matrix);
-
-[ssp,info] = snd_spd(P,temp47,sal47,<span class="string">'del grosso'</span>,LAT_matrix);
-<span class="comment">% 2) SND_SPD(P,T,S,'del grosso',lat) returns the sound speed (m/sec)</span>
-<span class="comment">%             given vectors of salinity (ppt), temperature (deg C), and</span>
-<span class="comment">%             PRESSURE (dbar) using the Del Grosso equation:</span>
-<span class="comment">%</span>
-<span class="comment">%             Del Grosso, "A New Equation for the speed of sound in Natural</span>
-<span class="comment">%             Waters", J. Acoust. Soc. Am. 56#4 (1974).</span>
-
-dsig = diff (sig);
-dz = diff (Z_matrix);
-dp = diff (P);
-
-N2 = (-g(1:length(depth47)-1,:)./sig(1:length(depth47)-1,:)).*(dsig./dz-1./(ssp(1:length(depth47)-1,:).^2).*dp./dz);
-
-[Y,I] = min(N2);
-
-mixed_depth = zeros (1,length(lon47));
-<span class="keyword">for</span> h=1:length(lon47)
-    mixed_depth (h) = Z_matrix(I(h));
-<span class="keyword">end</span>
-
-XTickVec=[datenum(2008,2,4),datenum(2008,3:9,1),datenum(2008,9,23)];
-contourf(date47,depth47,sal47, 34:0.2:35.5);
-    set(gca, <span class="string">'ydir'</span>, <span class="string">'reverse'</span>);
-    ylabel(<span class="string">'depth [m]'</span>);
-    xlabel(<span class="string">'day of year'</span>);
-    colormap <span class="string">jet</span>;
-    c=colorbar;
-    ylabel(c,<span class="string">'salinity [psu]'</span>);
-    title(<span class="string">'seal47'</span>);
-    set(gca,<span class="string">'XTick'</span>,XTickVec);
-    datetick(<span class="string">'x'</span>,<span class="string">'dd.mm.'</span>,<span class="string">'keepticks'</span>);
-hold
-plot(date47,mixed_depth,<span class="string">'LineWidth'</span>,1.5,<span class="string">'color'</span>,<span class="string">'m'</span>);
-print(<span class="string">'C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\mixedlayer+sal47'</span>,<span class="string">'-dsvg'</span>);
-close
-
-plot(date47,mixed_depth);
-set(gca, <span class="string">'ydir'</span>, <span class="string">'reverse'</span>);
-    ylabel(<span class="string">'depth [m]'</span>);
-    xlabel(<span class="string">'day of year'</span>);
-    title(<span class="string">'seal47'</span>);
-    set(gca,<span class="string">'XTick'</span>,XTickVec);
-    datetick(<span class="string">'x'</span>,<span class="string">'dd.mm.'</span>,<span class="string">'keepticks'</span>);
-print(<span class="string">'C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\mixedlayer'</span>,<span class="string">'-dsvg'</span>);
-</pre><pre class="codeoutput">Current plot held
-</pre><img vspace="5" hspace="5" src="matLab_Code_08.png" alt=""> <h2 id="13">potential density</h2><pre class="codeinput">d0_47=sw_dens0(sal47,temp47);
+    print(<span class="string">'C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\seal99icegrowth'</span>,<span class="string">'-dsvg'</span>)
+clear <span class="string">rho_0</span> <span class="string">rho_i</span> <span class="string">S_i</span> <span class="string">S_0</span> <span class="string">S_f</span> <span class="string">h_0</span> <span class="string">h_if</span>
+</pre><img vspace="5" hspace="5" src="matLab_Code_08.png" alt=""> <h2 id="12">mixed layer depth</h2><p>% Seal data project MAR440 HT-18 Eleonora Van Sitteren Group 2 Z_matrix = zeros(length(depth47),length(lon47)); for i=1:length(lon47) Z_matrix (:,i) = depth47; end</p><p>LAT_row = lat47;</p><p>LAT_matrix = zeros (length(47),length(lon47)); for o=1:length(depth47)     LAT_matrix (o,:) = LAT_row; end</p><p>P = z2p80(Z_matrix,LAT_matrix); %gives the pressure P (dbars) at a depth D (m) at some latitude LAT (degrees).</p><p>[SPV,K,SterAn] = alpha(P,temp47,sal47);</p><pre>PTEMP = theta(P,temp47,sal47); %is the local potential temperature
+      % at reference pressure P0 using Bryden 1973 polynomial for
+      % adiabatic lapse rate and Runge-Kutta fourth order integration
+      % algorithm.</pre><p>sig = sigma(P,temp47,sal47,1);</p><p>%  SIGMA  Density of Seawater</p><p>clear rho_0 rho_i S_i S_0 S_f h_0 XTickVec t h_if; %% mixed layer depth % Seal data project MAR440 HT-18 Eleonora Van Sitteren Group 2 Z_matrix = zeros(length(depth47),length(lon47)); for i=1:length(lon47) Z_matrix (:,i) = depth47; end</p><p>LAT_row = lat47;</p><p>LAT_matrix = zeros (length(47),length(lon47)); for o=1:length(depth47)     LAT_matrix (o,:) = LAT_row; end</p><p>P = z2p80(Z_matrix,LAT_matrix); %gives the pressure P (dbars) at a depth D (m) at some latitude LAT (degrees).</p><p>[SPV,K,SterAn] = alpha(P,temp47,sal47);</p><pre>PTEMP = theta(P,temp47,sal47); %is the local potential temperature
+      % at reference pressure P0 using Bryden 1973 polynomial for
+      % adiabatic lapse rate and Runge-Kutta fourth order integration
+      % algorithm.</pre><p>sig = sigma(P,temp47,sal47,1);</p><p>%  SIGMA  Density of Seawater % %  SIG = SIGMA( P , T , S , [Pref] ) % %  computation of density of seawater %  referenced to arbitrary pressures %  based on 'alpha.m' % %  input  :    P        : pressure [dbar] %         T        : in situ temperature [degC] IPTS-68 %         S        : salinity [psu]             IPSS-78 %         Pref    [p]    : optional reference pressure %                                  use: SIGMA(Pref,THETA(P,T,S,Pref),S) % %  output :    SIG        : density of seawater at pressure P (adiabatic) %                   [kg/m^3]</p><p>g = gravit (LAT_matrix);</p><p>[ssp,info] = snd_spd(P,temp47,sal47,'del grosso',LAT_matrix); % 2) SND_SPD(P,T,S,'del grosso',lat) returns the sound speed (m/sec) %             given vectors of salinity (ppt), temperature (deg C), and %             PRESSURE (dbar) using the Del Grosso equation: % %             Del Grosso, "A New Equation for the speed of sound in Natural %             Waters", J. Acoust. Soc. Am. 56#4 (1974).</p><p>dsig = diff (sig); dz = diff (Z_matrix); dp = diff (P);</p><p>N2 = (-g(1:length(depth47)-1,:)./sig(1:length(depth47)-1,:)).*(dsig./dz-1./(ssp(1:length(depth47)-1,:).^2).*dp./dz);</p><p>[Y,I] = min(N2);</p><p>mixed_depth = zeros (1,length(lon47)); for h=1:length(lon47)     mixed_depth (h) = Z_matrix(I(h)); end</p><p>XTickVec=[datenum(2008,2,4),datenum(2008,3:9,1),datenum(2008,9,23)]; contourf(date47,depth47,sal47, 34:0.2:35.5);     set(gca, 'ydir', 'reverse');     ylabel('depth [m]');     xlabel('day of year');     colormap jet;     c=colorbar;     ylabel(c,'salinity [psu]');     title('seal47');     set(gca,'XTick',XTickVec);     datetick('x','dd.mm.','keepticks'); hold plot(date47,mixed_depth,'LineWidth',1.5,'color','m'); print('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\mixedlayer+sal47','-dsvg'); close</p><p>plot(date47,mixed_depth); set(gca, 'ydir', 'reverse');     ylabel('depth [m]');     xlabel('day of year');     title('seal47');     set(gca,'XTick',XTickVec);     datetick('x','dd.mm.','keepticks'); print('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\mixedlayer','-dsvg'); clear dp dsig dz g h i l info K LAT_matrix LAT_row N2 o P PTEMP sig SPV ssp SterAn Y Z_matrix;</p><h2 id="13">potential density</h2><pre class="codeinput">d0_47=sw_dens0(sal47,temp47);
 contourf(date47,depth47,d0_47, 1027:0.05:1028);
 <span class="comment">% shading interp</span>
 colorbar;
@@ -420,14 +401,16 @@ ml47=zeros(1,length(lon47));
 clear <span class="string">t</span>  <span class="string">u</span>;
 <span class="keyword">for</span> t=1:length(lon47)
    <span class="keyword">for</span> u=3:length(depth47)
-           <span class="keyword">if</span> depth47(u) not <span class="string">'NaN'</span>;
-                <span class="keyword">if</span> +d0_47(u,t)-d0_47(3,t)&gt;0.02;
+           <span class="keyword">if</span> depth47(u)
+                not <span class="string">'NaN'</span>;
+                <span class="keyword">if</span> +d0_47(u,t)-d0_47(3,t)&gt;0.02
                 ml47(t)=depth47(u);
                 <span class="keyword">break</span>
                 <span class="keyword">end</span>
            <span class="keyword">end</span>
    <span class="keyword">end</span>
 <span class="keyword">end</span>
+
 XTickVec=[datenum(2008,2,4),datenum(2008,3:9,1),datenum(2008,9,23)];
 plot(date47,ml47); <span class="comment">% mixed layer depth</span>
 set(gca, <span class="string">'ydir'</span>, <span class="string">'reverse'</span>);
@@ -437,35 +420,49 @@ set(gca, <span class="string">'ydir'</span>, <span class="string">'reverse'</spa
     set(gca,<span class="string">'XTick'</span>,XTickVec);
     datetick(<span class="string">'x'</span>,<span class="string">'dd.mm.'</span>,<span class="string">'keepticks'</span>);
 print(<span class="string">'C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\mixedlayer_dens0'</span>,<span class="string">'-dsvg'</span>);
-</pre><img vspace="5" hspace="5" src="matLab_Code_09.png" alt=""> <h2 id="14">ice formation with ML depth... V_0 replaced with mixed layer depth</h2><pre class="codeinput"><span class="comment">%seal 47</span>
-rho_0=1027;     <span class="comment">%kg m-3</span>
-rho_i=920;      <span class="comment">%kg m-3</span>
-S_i=10;         <span class="comment">%psu</span>
-<span class="comment">% S_0=sum(sal47(3:21,250:260)); %salinity from date250 to date350</span>
-<span class="comment">% S_f=sum(sal47(3:21,350:360));</span>
-<span class="comment">% h_i = (rho_0*mixed_*S_0-rho_0*h_0*S_f)/(rho_i*S_i-rho_0*S_f); %net ice formation rate over the time frame</span>
-<span class="comment">% h_id = h_i/(date47(350)-date47(250)); %ice formation rate by day</span>
-clear <span class="string">h_if</span>
-<span class="keyword">for</span> t=1:(length(date47)-30)
-    S_0=sum(sal47(3:21,t));
-    S_f=sum(sal47(3:21,t+30));
-    h_if(t) = ((rho_0*mixed_depth(t)*S_0-rho_0*mixed_depth(t)*S_f)/(rho_i*S_i-rho_0*S_f))/(date47(t+30)-date47(t));
-<span class="keyword">end</span>
 
-plot(date47(1:length(date47)-30),h_if); <span class="comment">%daily ice growth (difference between day t and day t+30)</span>
-    line([date47(1) date47(length(date47))], [0 0], <span class="string">'color'</span>,<span class="string">'r'</span>);
-    XTickVec=[datenum(2008,2,4),datenum(2008,3:10,1)];
-    ylabel(<span class="string">'icegrowth [m/d]'</span>);
+contourf(date47,depth47,d0_47-d0_47(3,:), -0.1:0.2:1);
+set(gca, <span class="string">'ydir'</span>, <span class="string">'reverse'</span>);
+    colorbar;
+    ylabel(<span class="string">'depth [m]'</span>);
     xlabel(<span class="string">'day of year'</span>);
-    title(<span class="string">'ice formation rate seal 47. h_0 = mixed layer depth'</span>);
+    title(<span class="string">'seal47'</span>);
     set(gca,<span class="string">'XTick'</span>,XTickVec);
     datetick(<span class="string">'x'</span>,<span class="string">'dd.mm.'</span>,<span class="string">'keepticks'</span>);
+print(<span class="string">'C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\dens0_diff'</span>,<span class="string">'-dsvg'</span>);
 
-clear <span class="string">rho_0</span> <span class="string">rho_i</span> <span class="string">S_i</span> <span class="string">S_0</span> <span class="string">S_f</span> <span class="string">h_0</span>
-</pre><img vspace="5" hspace="5" src="matLab_Code_10.png" alt=""> <h2 id="15">static zone</h2><pre class="codeinput"><span class="comment">%dates 219-400</span>
+clear <span class="string">t</span> <span class="string">l</span> <span class="string">c</span> <span class="string">ans</span> <span class="string">u</span>;
+<span class="comment">% %% ice formation with ML depth... V_0 replaced with mixed layer depth</span>
+<span class="comment">% %seal 47</span>
+<span class="comment">% rho_0=1027;     %kg m-3</span>
+<span class="comment">% rho_i=920;      %kg m-3</span>
+<span class="comment">% S_i=10;         %psu</span>
+<span class="comment">% % S_0=sum(sal47(3:21,250:260)); %salinity from date250 to date350</span>
+<span class="comment">% % S_f=sum(sal47(3:21,350:360));</span>
+<span class="comment">% % h_i = (rho_0*mixed_*S_0-rho_0*h_0*S_f)/(rho_i*S_i-rho_0*S_f); %net ice formation rate over the time frame</span>
+<span class="comment">% % h_id = h_i/(date47(350)-date47(250)); %ice formation rate by day</span>
+<span class="comment">% clear h_if</span>
+<span class="comment">% h_if=zeros(1,length(lon47)-30);</span>
+<span class="comment">% for t=1:(length(date47)-30)</span>
+<span class="comment">%     S_0=sum(sal47(3:21,t));</span>
+<span class="comment">%     S_f=sum(sal47(3:21,t+30));</span>
+<span class="comment">%     h_if(t) = ((rho_0*mixed_depth(t)*S_0-rho_0*mixed_depth(t)*S_f)/(rho_i*S_i-rho_0*S_f))/(date47(t+30)-date47(t));</span>
+<span class="comment">% end</span>
+<span class="comment">%</span>
+<span class="comment">% plot(date47(1:length(date47)-30),h_if); %daily ice growth (difference between day t and day t+30)</span>
+<span class="comment">%     line([date47(1) date47(length(date47))], [0 0], 'color','r');</span>
+<span class="comment">%     XTickVec=[datenum(2008,2,4),datenum(2008,3:10,1)];</span>
+<span class="comment">%     ylabel('icegrowth [m/d]');</span>
+<span class="comment">%     xlabel('day of year');</span>
+<span class="comment">%     title('ice formation rate seal 47. h_0 = mixed layer depth');</span>
+<span class="comment">%     set(gca,'XTick',XTickVec);</span>
+<span class="comment">%     datetick('x','dd.mm.','keepticks');</span>
+<span class="comment">%</span>
+<span class="comment">% clear rho_0 rho_i S_i S_0 S_f h_0 t I</span>
+</pre><img vspace="5" hspace="5" src="matLab_Code_09.png" alt=""> <h2 id="14">static zone</h2><pre class="codeinput"><span class="comment">%dates 219-400</span>
 figure(2);
 hold <span class="string">off</span>;
-XTickVec=[datenum(2008,4:6,1)];
+XTickVec=datenum(2008,4:6,1);
 contourf(date47(219:400),depth47,d0_47(:,219:400),1027:0.05:1028);
     set(gca, <span class="string">'ydir'</span>, <span class="string">'reverse'</span>);
     ylabel(<span class="string">'depth [m]'</span>);
@@ -473,13 +470,14 @@ contourf(date47(219:400),depth47,d0_47(:,219:400),1027:0.05:1028);
     colormap <span class="string">jet</span>;
     c=colorbar;
     ylabel(c,<span class="string">'potential density [kg m-3'</span>);
-    title(<span class="string">'seal47'</span>);
+    title(<span class="string">'seal47 sal in static zone, red line = most static zone'</span>);
     set(gca,<span class="string">'XTick'</span>,XTickVec);
     datetick(<span class="string">'x'</span>,<span class="string">'dd.mm.'</span>,<span class="string">'keepticks'</span>);
-hold;
+hold <span class="string">on</span>;
 plot(date47(219:400),ml47(219:400),<span class="string">'color'</span>,<span class="string">'r'</span>);
-</pre><pre class="codeoutput">Current plot held
-</pre><img vspace="5" hspace="5" src="matLab_Code_11.png" alt=""> <h2 id="16">smooth</h2><pre class="codeinput">sal47s=smooth2a(sal47,1 ,100); <span class="comment">%entered matrix, number of rows, number of columns</span>
+hold <span class="string">off</span>;
+close;
+</pre><h2 id="15">smooth</h2><pre class="codeinput">sal47s=smooth2a(sal47,1 ,100); <span class="comment">%entered matrix, number of rows, number of columns</span>
 subplot(1,2,1);
 contourf(date47,depth47,sal47,34:0.2:35.5);
 colorbar;
@@ -498,7 +496,6 @@ rho_i=920; <span class="comment">%kg m-3</span>
 S_i=10;      <span class="comment">%psu</span>
 h_0=100;     <span class="comment">%m</span>
 
-
 <span class="keyword">for</span> t=1:(length(date47)-30)
     S_0=sum(sal47s(3:21,t));
     S_f=sum(sal47s(3:21,t+30));
@@ -513,8 +510,315 @@ plot(date47(1:length(date47)-30),h_if); <span class="comment">%daily ice growth 
     datetick(<span class="string">'x'</span>,<span class="string">'dd.mm.'</span>,<span class="string">'keepticks'</span>);
     title(<span class="string">'daily ice growth'</span>);
 
-clear <span class="string">rho_0</span> <span class="string">rho_i</span> <span class="string">h_0</span>
-</pre><img vspace="5" hspace="5" src="matLab_Code_12.png" alt=""> <h2 id="17">to do</h2><p>interpolate data overlay map with lat/lon data Sea ice modelling(FESOM) [Timmermann R, Danilov S, Schr&ouml;ter JA (2006) Geophys Res Abstr 8:07063] When calculating Ice growth NaN is treated as zeroes</p><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018a</a><br></p></div><!--
+clear <span class="string">rho_0</span> <span class="string">rho_i</span> <span class="string">h_0</span> <span class="string">S_0</span> <span class="string">S_f</span> <span class="string">S_i</span> <span class="string">t</span> <span class="string">c</span>
+</pre><img vspace="5" hspace="5" src="matLab_Code_10.png" alt=""> <h2 id="16">better smoothing (press data into one day)</h2><pre class="language-matlab">-----FUNCTION SMOOTHDAY <span class="string">----</span>
+sal47t=transpose(sal47);
+<span class="keyword">for</span> t=1:length(depth47)
+ tt=timetable(d47,sal47t(:,t));
+  tt=retime(tt,<span class="string">'daily'</span>, <span class="string">'mean'</span>);
+  tt=timetable2table(tt); <span class="comment">%row 1: time row 2: salinity at depth t</span>
+  timen47=tt(:,1); <span class="comment">%new date format showing each day with data once</span>
+  tt(:,1)=[]; <span class="comment">%delete time column out of table</span>
+  tt=table2array(tt); <span class="comment">%transform sal table (1x57) to sal array (1x57)</span>
+  sal47s2(t,:)=tt; <span class="comment">%add sal column to a new array sal47s2</span>
+<span class="keyword">end</span>
+XTickVec=[datenum(2008,2,4),datenum(2008,3:9,1),datenum(2008,9,23)];
+timen47=table2array(timen47);
+time47=datenum(timen47);
+-------------------
+</pre><pre class="codeinput">[sal47s2,time47, timen47]=smoothday(sal47,depth47,date47);
+contourf(time47,depth47,smooth2a(sal47s2,1,15), 33.8:0.2:35.5);
+    set(gca, <span class="string">'ydir'</span>, <span class="string">'reverse'</span>);
+    ylabel(<span class="string">'depth [m]'</span>);
+    xlabel(<span class="string">'day of year'</span>);
+    colormap <span class="string">jet</span>;
+    c=colorbar;
+    ylabel(c,<span class="string">'salinity [psu]'</span>);
+    title(<span class="string">'seal47 mean value at each day'</span>);
+    set(gca,<span class="string">'XTick'</span>,XTickVec);
+    datetick(<span class="string">'x'</span>,<span class="string">'dd.mm.'</span>,<span class="string">'keepticks'</span>);
+print(<span class="string">'C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\seal47salinitytimesmoothday'</span>,<span class="string">'-dsvg'</span>);
+clear <span class="string">t</span>;
+</pre><img vspace="5" hspace="5" src="matLab_Code_11.png" alt=""> <h2 id="17">ice growth smoothed 47 area 1</h2><pre class="codeinput">close;
+ ig47=ice_growth(sal47s2,time47,1); <span class="comment">%call function ice_growth</span>
+subplot(2,2,1);
+    XTickVec=datenum(2008,2:10,1);
+plot(time47(1:length(ig47)),smooth2a(ig47,1,15)); <span class="comment">%smoothed over 3 days</span>
+    line([time47(1) time47(length(time47))], [0 0], <span class="string">'color'</span>,<span class="string">'r'</span>);
+    line([time47(65) time47(65)], [-0.2 0.2], <span class="string">'color'</span>,<span class="string">'r'</span>);
+    line([time47(117) time47(117)], [-0.2 0.2], <span class="string">'color'</span>,<span class="string">'r'</span>);
+    ylabel(<span class="string">'icegrowth [m/d]'</span>);
+    xlabel(<span class="string">'day of year'</span>);
+    title(<span class="string">'ice formation rate '</span>);
+    set(gcf,<span class="string">'position'</span>,[100 100 900 300]);
+    set(gca,<span class="string">'XTick'</span>,XTickVec);
+    datetick(<span class="string">'x'</span>,<span class="string">'dd.mm.'</span>,<span class="string">'keepticks'</span>);
+hold;
+
+subplot(2,2,2);
+contourf(time47,depth47,sal47s2, 34:0.2:35.5);
+    set(gca, <span class="string">'ydir'</span>, <span class="string">'reverse'</span>);
+    ylabel(<span class="string">'depth [m]'</span>);
+    xlabel(<span class="string">'day of year'</span>);
+    line([time47(65) time47(65)], [0 600], <span class="string">'color'</span>,<span class="string">'black'</span>, <span class="string">'LineWidth'</span>, 2);
+    line([time47(117) time47(117)], [0 600], <span class="string">'color'</span>,<span class="string">'black'</span>, <span class="string">'LineWidth'</span>, 2);
+    line([time47(1) time47(length(time47))], [100 100]);
+    colormap <span class="string">jet</span>;
+    title(<span class="string">'salinity'</span>);
+    set(gca,<span class="string">'XTick'</span>,XTickVec);
+    datetick(<span class="string">'x'</span>,<span class="string">'dd.mm.'</span>,<span class="string">'keepticks'</span>);
+hold;
+
+subplot(2,2,3); <span class="comment">%sum of salinity in upper 100 m</span>
+plot(time47, nansum(sal47s2(1:21,:)));
+    ylim([645 660]);
+    ylabel(<span class="string">'Sum of salinity in upper 100 m'</span>);
+    xlabel(<span class="string">'day of year'</span>);
+    line([time47(65) time47(65)], [0 700], <span class="string">'color'</span>,<span class="string">'black'</span>, <span class="string">'LineWidth'</span>, 2);
+    line([time47(117) time47(117)], [0 700], <span class="string">'color'</span>,<span class="string">'black'</span>, <span class="string">'LineWidth'</span>, 2);
+    set(gcf,<span class="string">'position'</span>,[100 100 900 300])
+    title(<span class="string">'Sum of salinity'</span>);
+    set(gca,<span class="string">'XTick'</span>,XTickVec);
+    datetick(<span class="string">'x'</span>,<span class="string">'dd.mm.'</span>,<span class="string">'keepticks'</span>);
+
+subplot(2,2,4); <span class="comment">%sealpath</span>
+scatter(lon47,lat47,5,day47);
+    title(<span class="string">'seal 47 path'</span>);
+    xlabel(<span class="string">'Longitude'</span>);
+    ylabel(<span class="string">'Latitude'</span>);
+    h47=colorbar;
+    ylabel(h47,<span class="string">'days of year'</span>);
+    colormap <span class="string">jet</span>;
+    line([30 36], [-69 -69]);
+    line([30 30], [-69 -64]);
+    line([30 36], [-64 -64]);
+    line([36 36], [-69 -64]);
+set(gcf, <span class="string">'Position'</span>, get(0, <span class="string">'Screensize'</span>));
+
+
+mean1=mean(ig47(65:117));
+var1=var(ig47(65:117));
+sum(ig47(65:117)); <span class="comment">% ice growth from 4.4. to 30.5. (stable period)</span>
+</pre><pre class="codeoutput">Current plot held
+Current plot held
+</pre><img vspace="5" hspace="5" src="matLab_Code_12.png" alt=""> <h2 id="18">ice concentration</h2><pre class="codeinput">[si47s,time47, timen47]=smoothday(si47,1,date47);
+plot(time47, si47s);
+    ylabel(<span class="string">'sea ice concentration'</span>);
+    xlabel(<span class="string">'day of year'</span>);
+    line([time47(65) time47(65)], [0 1], <span class="string">'color'</span>,<span class="string">'black'</span>, <span class="string">'LineWidth'</span>, 2);
+    line([time47(117) time47(117)], [0 1], <span class="string">'color'</span>,<span class="string">'black'</span>, <span class="string">'LineWidth'</span>, 2);
+    set(gcf,<span class="string">'position'</span>,[100 100 900 300])
+<span class="comment">%     title('Sum of salinity');</span>
+    set(gca,<span class="string">'XTick'</span>,XTickVec);
+    datetick(<span class="string">'x'</span>,<span class="string">'dd.mm.'</span>,<span class="string">'keepticks'</span>);
+mean_si=nanmean(si47s(65:117));
+var_si=nanvar(si47s(65:117));
+
+<span class="comment">%seal 99</span>
+[si99s,time99, timen99]=smoothday(si99,1,date99);
+plot(time99, si99s);
+    ylabel(<span class="string">'sea ice concentration'</span>);
+    xlabel(<span class="string">'day of year'</span>);
+<span class="comment">%     line([time99(65) time99(65)], [0 1], 'color','black', 'LineWidth', 2);</span>
+<span class="comment">%     line([time99(117) time99(117)], [0 1], 'color','black', 'LineWidth', 2);</span>
+    set(gcf,<span class="string">'position'</span>,[100 100 900 300])
+<span class="comment">%     title('Sum of salinity');</span>
+    set(gca,<span class="string">'XTick'</span>,XTickVec);
+    datetick(<span class="string">'x'</span>,<span class="string">'dd.mm.'</span>,<span class="string">'keepticks'</span>);
+</pre><img vspace="5" hspace="5" src="matLab_Code_13.png" alt=""> <h2 id="19">ice growth smoothed 47 area 2</h2><pre class="codeinput">close;
+ ig47=ice_growth(sal47s2,time47,1); <span class="comment">%call function ice_growth</span>
+subplot(2,2,1);
+    XTickVec=datenum(2008,8:10,1);
+plot(time47(196:223),smooth(ig47(196:223),1)); <span class="comment">%not smoothed</span>
+<span class="comment">%     line([time47(1) time47(length(time47))], [0 0], 'color','r');</span>
+<span class="comment">%     line([time47(65) time47(65)], [-0.2 0.2], 'color','r');</span>
+<span class="comment">%     line([time47(117) time47(117)], [-0.2 0.2], 'color','r');</span>
+    ylabel(<span class="string">'icegrowth [m/d]'</span>);
+    xlabel(<span class="string">'day of year'</span>);
+    title(<span class="string">'ice formation rate '</span>);
+    set(gcf,<span class="string">'position'</span>,[100 100 900 300]);
+        set(gca,<span class="string">'XTick'</span>,XTickVec);
+    datetick(<span class="string">'x'</span>,<span class="string">'dd.mm.'</span>,<span class="string">'keepticks'</span>);
+hold;
+
+subplot(2,2,2);
+contourf(time47(196:223),depth47,sal47s2(:,196:223), 34:0.2:35.5);
+    set(gca, <span class="string">'ydir'</span>, <span class="string">'reverse'</span>);
+    ylabel(<span class="string">'depth [m]'</span>);
+    xlabel(<span class="string">'day of year'</span>);
+<span class="comment">%     line([time47(65) time47(65)], [0 600], 'color','black', 'LineWidth', 2);</span>
+<span class="comment">%     line([time47(117) time47(117)], [0 600], 'color','black', 'LineWidth', 2);</span>
+<span class="comment">%     line([time47(1) time47(length(time47))], [100 100]);</span>
+    colormap <span class="string">jet</span>;
+    title(<span class="string">'salinity'</span>);
+    set(gca,<span class="string">'XTick'</span>,XTickVec);
+    datetick(<span class="string">'x'</span>,<span class="string">'dd.mm.'</span>,<span class="string">'keepticks'</span>);
+hold;
+
+subplot(2,2,3); <span class="comment">%sum of salinity in upper 100 m</span>
+plot(time47(196:223), nansum(sal47s2(1:21,196:223)));
+<span class="comment">%     ylim([645 660]);</span>
+    ylabel(<span class="string">'Sum of salinity in upper 100 m'</span>);
+    xlabel(<span class="string">'day of year'</span>);
+<span class="comment">%     line([time47(65) time47(65)], [0 700], 'color','black', 'LineWidth', 2);</span>
+<span class="comment">%     line([time47(117) time47(117)], [0 700], 'color','black', 'LineWidth', 2);</span>
+    set(gcf,<span class="string">'position'</span>,[100 100 900 300])
+    title(<span class="string">'Sum of salinity'</span>);
+    set(gca,<span class="string">'XTick'</span>,XTickVec);
+    datetick(<span class="string">'x'</span>,<span class="string">'dd.mm.'</span>,<span class="string">'keepticks'</span>);
+
+subplot(2,2,4); <span class="comment">%sealpath</span>
+scatter(lon47,lat47,5,day47);
+    title(<span class="string">'seal 47 path'</span>);
+    xlabel(<span class="string">'Longitude'</span>);
+    ylabel(<span class="string">'Latitude'</span>);
+    h47=colorbar;
+    ylabel(h47,<span class="string">'days of year'</span>);
+    colormap <span class="string">jet</span>;
+<span class="comment">%     line([30 36], [-69 -69]);</span>
+<span class="comment">%     line([30 30], [-69 -64]);</span>
+<span class="comment">%     line([30 36], [-64 -64]);</span>
+<span class="comment">%     line([36 36], [-69 -64]);</span>
+set(gcf, <span class="string">'Position'</span>, get(0, <span class="string">'Screensize'</span>));
+mean2=mean(ig47(196:223));
+var2=var(ig47(197:223));
+</pre><pre class="codeoutput">Current plot held
+Current plot held
+</pre><img vspace="5" hspace="5" src="matLab_Code_14.png" alt=""> <h2 id="20">ice growth smoothed 55 area 1</h2><pre class="codeinput">close;
+[sal55s2,time55,timen55]=smoothday(sal55,depth55,date55);
+ ig55=ice_growth(sal55s2,time55,1); <span class="comment">%call function ice_growth</span>
+subplot(2,2,1);
+    XTickVec=datenum(2008,2:10,1);
+plot(time55(1:length(ig55)),smooth2a(ig55,1,15)); <span class="comment">%smoothed over 3 days</span>
+    line([time55(1) time55(length(time55))], [0 0], <span class="string">'color'</span>,<span class="string">'r'</span>);
+    line([time55(109) time55(109)], [-0.2 0.2], <span class="string">'color'</span>,<span class="string">'r'</span>);
+    line([time55(173) time55(173)], [-0.2 0.2], <span class="string">'color'</span>,<span class="string">'r'</span>);
+    ylabel(<span class="string">'icegrowth [m/d]'</span>);
+    xlabel(<span class="string">'day of year'</span>);
+    title(<span class="string">'ice formation rate '</span>);
+    set(gca,<span class="string">'XTick'</span>,XTickVec);
+    datetick(<span class="string">'x'</span>,<span class="string">'dd.mm.'</span>,<span class="string">'keepticks'</span>);
+hold;
+
+subplot(2,2,2);
+contourf(time55,depth55,sal55s2, 34:0.2:35.5);
+    set(gca, <span class="string">'ydir'</span>, <span class="string">'reverse'</span>);
+    ylabel(<span class="string">'depth [m]'</span>);
+    xlabel(<span class="string">'day of year'</span>);
+    line([time55(109) time55(109)], [0 600], <span class="string">'color'</span>,<span class="string">'black'</span>, <span class="string">'LineWidth'</span>, 2);
+    line([time55(173) time55(173)], [0 600], <span class="string">'color'</span>,<span class="string">'black'</span>, <span class="string">'LineWidth'</span>, 2);
+    line([time55(1) time55(length(time55))], [100 100]);
+    colormap <span class="string">jet</span>;
+    title(<span class="string">'salinity'</span>);
+    set(gca,<span class="string">'XTick'</span>,XTickVec);
+    datetick(<span class="string">'x'</span>,<span class="string">'dd.mm.'</span>,<span class="string">'keepticks'</span>);
+hold;
+
+subplot(2,2,3); <span class="comment">%sum of salinity in upper 100 m</span>
+plot(time55, nansum(sal55s2(1:21,:)));
+    ylim([645 660]);
+    ylabel(<span class="string">'Sum of salinity in upper 100 m'</span>);
+    xlabel(<span class="string">'day of year'</span>);
+    line([time55(109) time55(109)], [0 700], <span class="string">'color'</span>,<span class="string">'black'</span>, <span class="string">'LineWidth'</span>, 2);
+    line([time55(173) time55(173)], [0 700], <span class="string">'color'</span>,<span class="string">'black'</span>, <span class="string">'LineWidth'</span>, 2);
+    set(gcf,<span class="string">'position'</span>,[100 100 900 300])
+    title(<span class="string">'Sum of salinity'</span>);
+    set(gca,<span class="string">'XTick'</span>,XTickVec);
+    datetick(<span class="string">'x'</span>,<span class="string">'dd.mm.'</span>,<span class="string">'keepticks'</span>);
+
+subplot(2,2,4); <span class="comment">%sealpath</span>
+scatter(lon55,lat55,5,day55);
+    title(<span class="string">'seal 55 path'</span>);
+    xlabel(<span class="string">'Longitude'</span>);
+    ylabel(<span class="string">'Latitude'</span>);
+    h55=colorbar;
+    ylabel(h55,<span class="string">'days of year'</span>);
+    colormap <span class="string">jet</span>;
+<span class="comment">%     line([30 36], [-69 -69]);</span>
+<span class="comment">%     line([30 30], [-69 -64]);</span>
+<span class="comment">%     line([30 36], [-64 -64]);</span>
+<span class="comment">%     line([36 36], [-69 -64]);</span>
+set(gcf, <span class="string">'Position'</span>, get(0, <span class="string">'Screensize'</span>));
+
+
+mean1_55=mean(ig55(109:173));
+var1_55=var(ig55(109:173));
+sum(ig55(109:173)); <span class="comment">% ice growth from 4.4. to 30.5. (stable period)</span>
+</pre><pre class="codeoutput">Current plot held
+Current plot held
+</pre><img vspace="5" hspace="5" src="matLab_Code_15.png" alt=""> <h2 id="21">ice growth smoothed x time y</h2><pre class="codeinput">close;
+<span class="comment">%Enter Sal depth and datex here</span>
+salx=sal99;
+depthx=depth99;
+datex=date99;
+time0=1;
+timeend=240;
+<span class="comment">%-----------------------</span>
+[salsx2,timex,timenx]=smoothday(salx,depthx,datex);
+ igx=ice_growth(salsx2,timex,1); <span class="comment">%call function ice_growth</span>
+subplot(2,2,1);
+    XTickVec=datenum(2008,2:11,1);
+plot(timex(1:length(igx)),smooth2a(igx,1,3)); <span class="comment">%smoothed over 3 days</span>
+    line([timex(1) timex(length(timex))], [0 0], <span class="string">'color'</span>,<span class="string">'r'</span>);
+    line([timex(time0) timex(time0)], [-0.2 0.2], <span class="string">'color'</span>,<span class="string">'r'</span>);
+    line([timex(timeend) timex(timeend)], [-0.2 0.2], <span class="string">'color'</span>,<span class="string">'r'</span>);
+    ylabel(<span class="string">'icegrowth [m/d]'</span>);
+    xlabel(<span class="string">'day of year'</span>);
+    title(<span class="string">'ice formation rate '</span>);
+    set(gca,<span class="string">'XTick'</span>,XTickVec);
+    datetick(<span class="string">'x'</span>,<span class="string">'dd.mm.'</span>,<span class="string">'keepticks'</span>);
+hold;
+
+subplot(2,2,2);
+contourf(timex,depthx,salsx2, 33.6:0.2:35.5);
+    set(gca, <span class="string">'ydir'</span>, <span class="string">'reverse'</span>);
+    ylabel(<span class="string">'depth [m]'</span>);
+    xlabel(<span class="string">'day of year'</span>);
+    line([timex(time0) timex(time0)], [0 600], <span class="string">'color'</span>,<span class="string">'black'</span>, <span class="string">'LineWidth'</span>, 2);
+    line([timex(timeend) timex(timeend)], [0 600], <span class="string">'color'</span>,<span class="string">'black'</span>, <span class="string">'LineWidth'</span>, 2);
+    line([timex(1) timex(length(timex))], [100 100]);
+    colormap <span class="string">jet</span>;
+    title(<span class="string">'salinity'</span>);
+    set(gca,<span class="string">'XTick'</span>,XTickVec);
+    datetick(<span class="string">'x'</span>,<span class="string">'dd.mm.'</span>,<span class="string">'keepticks'</span>);
+hold;
+
+subplot(2,2,3); <span class="comment">%sum of salinity in upper 100 m</span>
+plot(timex, nansum(salsx2(1:21,:)));
+    ylim([645 660]);
+    ylabel(<span class="string">'Sum of salinity in upper 100 m'</span>);
+    xlabel(<span class="string">'day of year'</span>);
+    line([timex(time0) timex(time0)], [0 700], <span class="string">'color'</span>,<span class="string">'black'</span>, <span class="string">'LineWidth'</span>, 2);
+    line([timex(timeend) timex(timeend)], [0 700], <span class="string">'color'</span>,<span class="string">'black'</span>, <span class="string">'LineWidth'</span>, 2);
+    title(<span class="string">'Sum of salinity'</span>);
+    set(gca,<span class="string">'XTick'</span>,XTickVec);
+    datetick(<span class="string">'x'</span>,<span class="string">'dd.mm.'</span>,<span class="string">'keepticks'</span>);
+
+subplot(2,2,4); <span class="comment">%sealpath</span>
+scatter(lon55,lat55,5,day55);
+    title(<span class="string">'seal 55 path'</span>);
+    xlabel(<span class="string">'Longitude'</span>);
+    ylabel(<span class="string">'Latitude'</span>);
+    h55=colorbar;
+    ylabel(h55,<span class="string">'days of year'</span>);
+    colormap <span class="string">jet</span>;
+<span class="comment">%     line([30 36], [-69 -69]);</span>
+<span class="comment">%     line([30 30], [-69 -64]);</span>
+<span class="comment">%     line([30 36], [-64 -64]);</span>
+<span class="comment">%     line([36 36], [-69 -64]);</span>
+set(gcf, <span class="string">'Position'</span>, get(0, <span class="string">'Screensize'</span>));
+
+
+mean1_x=nanmean(igx(time0:timeend));
+var1_x=nanvar(igx(time0:timeend));
+sumx=nansum(igx(time0:timeend)); <span class="comment">% ice growth from 4.4. to 30.5. (stable period)</span>
+
+
+clear <span class="string">time0</span> <span class="string">timeend</span>
+</pre><pre class="codeoutput">Current plot held
+Current plot held
+</pre><img vspace="5" hspace="5" src="matLab_Code_16.png" alt=""> <h2 id="22">clear some stuff</h2><pre class="codeinput">clear <span class="string">o</span> <span class="string">PTEMP</span> <span class="string">P</span>
+</pre><h2 id="23">to do</h2><p>function ice growth rate overlay map with lat/lon data Sea ice modelling(FESOM) [Timmermann R, Danilov S, Schr&Atilde;&para;ter JA (2006) Geophys Res Abstr 8:07063]</p><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 % group project "Seal data"
 % Group 2: Heiner Schmidt, Martin Mohrmann, Eleonora van Sitteren
@@ -523,29 +827,35 @@ clear <span class="string">rho_0</span> <span class="string">rho_i</span> <span 
 %import files
 load('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\rawdata\seal_47.mat');
 date47 = DATE;
-lat47=LAT;
-lon47=LON;
-sal47=SAL;
-temp47=TEMP;
-depth47=Z;
+lat47 = LAT;
+lon47 = LON;
+sal47 = SAL;
+temp47 = TEMP;
+depth47 = Z;
+
+load('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\rawdata\SIConc_Seals');
+si47=SI_47;
+si55=SI_55;
+si99=SI_99;
+
 
 load('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\rawdata\seal_55.mat');
 date55 = DATE;
-lat55=LAT;
-lon55=LON;
-sal55=SAL;
-temp55=TEMP;
-depth55=Z;
+lat55 = LAT;
+lon55 = LON;
+sal55 = SAL;
+temp55 = TEMP;
+depth55 = Z;
 
 load('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\rawdata\seal_99.mat');
-date99=DATE;
-lat99=LAT;
-lon99=LON;
-sal99=SAL;
-temp99=TEMP;
-depth99=Z;
+date99 = DATE;
+lat99 = LAT;
+lon99 = LON;
+sal99 = SAL;
+temp99 = TEMP;
+depth99 = Z;
 
-clear DATE LON LAT SAL TEMP Z;
+clear DATE LON LAT SAL TEMP Z info SI_47 SI_55 SI_99;
 %end import
 %% date conversion
 day47=date47-datenum(2008,2,4);
@@ -556,6 +866,34 @@ d55=datetime(date55, 'ConvertFrom', 'datenum');
 d99=datetime(date99, 'ConvertFrom', 'datenum');
 
 %% video of seal path
+% salinity and temp at 10m depth
+close;
+figure(1);
+scatter(lon47,lat47,5,temp47(3,:));
+hold;
+scatter(lon55,lat55,5,temp55(3,:));
+hold on;
+scatter(lon99,lat99,5,temp99(3,:));
+    xlabel('Longitude');
+    ylabel('Latidude');
+    colorbar;
+    title('Temp all seals');
+print('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\tempallseals', '-dsvg');
+close;
+
+figure(1);
+scatter(lon47,lat47,5,sal47(3,:));
+hold on;
+scatter(lon55,lat55,5,sal55(3,:));
+hold on;
+scatter(lon99,lat99,5,sal99(3,:));
+    xlabel('Longitude');
+    ylabel('Latidude');
+    colorbar; 
+    caxis([34 34.6]);
+    title('salinity of all seals');
+print('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\salallseals', '-dsvg');
+    
 % v=VideoWriter('sealpath.avi');
 % v.FrameRate=10;
 % open(v);
@@ -639,7 +977,7 @@ contourf(date55,depth55,sal55, 34:0.2:35.5);
 print('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\seal55salinitytime','-dsvg');
 
 XTickVec=[datenum(2008,2,5),datenum(2008,3:10,1),datenum(2008,11,17)];
-contourf(date99,depth99,sal99, 34:0.2:35.5);
+contourf(date99,depth99,sal99, 33:0.2:37);
     set(gca, 'ydir', 'reverse');
     ylabel('depth [m]');
     xlabel('day of year');
@@ -660,7 +998,7 @@ XTickVec=[datenum(2008,2,4),datenum(2008,3:9,1),datenum(2008,9,23)];
     colormap jet;
     c.LineWidth=0.1;
     c=colorbar;
-    ylabel(c,'temp [°C]');
+    ylabel(c,'temp [Â°C]');
     title('seal47');
     set(gca,'XTick',XTickVec);
     datetick('x','dd.mm.','keepticks');
@@ -674,26 +1012,26 @@ XTickVec=[datenum(2008,2,7),datenum(2008,3:10,1),datenum(2008,11,11)];
     colormap jet;
     c.LineWidth=0.1;
     c=colorbar;
-    ylabel(c,'temp [°C]');
+    ylabel(c,'temp [Â°C]');
     title('seal55');
     set(gca,'XTick',XTickVec);
     datetick('x','dd.mm.','keepticks');
 print('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\seal55temptime','-dsvg');
 
 XTickVec=[datenum(2008,2,5),datenum(2008,3:10,1),datenum(2008,11,17)];
-[m,c]=contourf(date99,depth99,temp99, -2:0.5:2);
+[~,c]=contourf(date99,depth99,temp99, -2:0.5:2);
     set(gca, 'ydir', 'reverse');
     ylabel('depth [m]');
     xlabel('day of year');
     colormap jet;
     c.LineWidth=0.1;
     c=colorbar;
-    ylabel(c,'temp [°C]');
+    ylabel(c,'temp [Â°C]');
     title('seal99');
     set(gca,'XTick',XTickVec);
     datetick('x','dd.mm.','keepticks');
 print('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\seal99temptime','-dsvg');
-
+clear m h47 h55 h99 c XTickVec;
 %% p color plots
 pcolor(day47,depth47,temp47);
     shading interp;
@@ -702,7 +1040,7 @@ pcolor(day47,depth47,temp47);
     xlabel('day of year');
     title('seal47');
     c=colorbar;
-    ylabel(c,'temperature [°C]');
+    ylabel(c,'temperature [Â°C]');
 
 pcolor(day55,depth55,temp55);
     shading interp;
@@ -711,7 +1049,7 @@ pcolor(day55,depth55,temp55);
     xlabel('day of year');
     title('seal55');
     c=colorbar;
-    ylabel(c,'temperature [°C]');
+    ylabel(c,'temperature [Â°C]');
 
 pcolor(day99,depth99,temp99);
     shading interp;
@@ -720,29 +1058,29 @@ pcolor(day99,depth99,temp99);
     xlabel('day of year');
     title('seal99');
     c=colorbar;
-    ylabel(c,'temperature [°C]');
-    
+    ylabel(c,'temperature [Â°C]');
+clear c;
 %% time frame when seal stayed in one place
 %seal 47 start 98.24 end: 150.38
 day47(219);
 day47(400);
 %seal 55 start: 143.61 end: 210.67
 day55(355);
-day55(565);
+day55(562);
 %seal 99 start 35.17 end: 275.56
 day99(1);
 day99(665);
-
+clear ans;
 %% ice formation rate
 %seal 47
 rho_0=1027; %kg m-3
 rho_i=920; %kg m-3
 S_i=10;      %psu
 h_0=100;     %m
-S_0=sum(sal47(3:21,250:260)); %salinity from date250 to date350
-S_f=sum(sal47(3:21,350:360));
-h_i = (rho_0*h_0*S_0-rho_0*h_0*S_f)/(rho_i*S_i-rho_0*S_f); %net ice formation rate over the time frame
-h_id = h_i/(date47(350)-date47(250)); %ice formation rate by day
+% S_0=sum(sal47(3:21,250:260)); %salinity from date250 to date350
+% S_f=sum(sal47(3:21,350:360));
+% h_i = (rho_0*h_0*S_0-rho_0*h_0*S_f)/(rho_i*S_i-rho_0*S_f); %net ice formation rate over the time frame
+% h_id = h_i/(date47(350)-date47(250)); %ice formation rate by day
 clear h_if
 h_if=zeros(1,length(lon47)-30);
 for t=1:(length(date47)-30)
@@ -758,14 +1096,17 @@ plot(date47(1:length(date47)-30),h_if); %daily ice growth (difference between da
     xlabel('day of year');
     set(gca,'XTick',XTickVec);
     datetick('x','dd.mm.','keepticks');
-    title('daily ice growth');
+    title('daily ice growth seal 47');
 print('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\seal47icegrowth','-dsvg')
+
+clear rho_0 rho_i S_i S_0 S_f h_0 h_id t h_if XTickVec;
 %% ice formation seal 55
 rho_0=1027; %kg m-3
 rho_i=920; %kg m-3
 S_i=10;      %psu
 h_0=100;     %m
 clear h_if
+h_if=zeros(1,length(lon55)-30);
 for t=1:(length(date55)-30)
     S_0=sum(sal55(3:21,t));
     S_f=sum(sal55(3:21,t+30));
@@ -783,7 +1124,11 @@ plot(date55(1:length(date55)-30),h_if); %daily ice growth (difference between da
     title('seal47 - daily ice growth as difference between time frame t and t+30');
     set(gca,'XTick',XTickVec);
     datetick('x','dd.mm.','keepticks');
+print('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\seal55icegrowth','-dsvg')
+    
 
+
+clear rho_0 rho_i S_i S_0 S_f h_0 XTickVec t h_if;
 %% ice formation seal 99
 
 rho_0=1027; %kg m-3
@@ -791,6 +1136,7 @@ rho_i=920; %kg m-3
 S_i=10;      %psu
 h_0=100;     %m
 clear h_if
+h_if=zeros(1,length(lon99)-30);
 for t=1:(length(date99)-30)
     S_0=sum(sal99(3:21,t));
     S_f=sum(sal99(3:21,t+30));
@@ -805,99 +1151,127 @@ plot(date99(1:length(date99)-30),h_if); %daily ice growth (difference between da
     title('seal99 - daily ice growth as difference between time frame t and t+30');
     set(gca,'XTick',XTickVec);
     datetick('x','dd.mm.','keepticks');
-clear rho_0 rho_i S_i S_0 S_f h_0
+    print('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\seal99icegrowth','-dsvg')
+clear rho_0 rho_i S_i S_0 S_f h_0 h_if
     
 %% mixed layer depth
-% Seal data project MAR440 HT-18 Eleonora Van Sitteren Group 2 
-Z_matrix = zeros(length(depth47),length(lon47));
-for i=1:length(lon47)
-Z_matrix (:,i) = depth47;
-end
-
-LAT_row = lat47;
-
-LAT_matrix = zeros (length(47),length(lon47));
-for o=1:length(depth47)
-    LAT_matrix (o,:) = LAT_row;
-end
-
-P = z2p80(Z_matrix,LAT_matrix); %gives the pressure P (dbars) at a depth D (m) at some latitude LAT (degrees).
-
-[SPV,K,SterAn] = alpha(P,temp47,sal47);
-
- PTEMP = theta(P,temp47,sal47); %is the local potential temperature
-       % at reference pressure P0 using Bryden 1973 polynomial for
-       % adiabatic lapse rate and Runge-Kutta fourth order integration
-       % algorithm.
-
-sig = sigma(P,temp47,sal47,1);
-
-%  SIGMA  Density of Seawater
+% % Seal data project MAR440 HT-18 Eleonora Van Sitteren Group 2 
+% Z_matrix = zeros(length(depth47),length(lon47));
+% for i=1:length(lon47)
+% Z_matrix (:,i) = depth47;
+% end
 % 
-%  SIG = SIGMA( P , T , S , [Pref] )
-%     
-%  computation of density of seawater 
-%  referenced to arbitrary pressures 
-%  based on 'alpha.m'
+% LAT_row = lat47;
 % 
-%  input  :    P        : pressure [dbar]
-%         T        : in situ temperature [degC] IPTS-68
-%         S        : salinity [psu]             IPSS-78
-%         Pref    [p]    : optional reference pressure
-%                                  use: SIGMA(Pref,THETA(P,T,S,Pref),S)
+% LAT_matrix = zeros (length(47),length(lon47));
+% for o=1:length(depth47)
+%     LAT_matrix (o,:) = LAT_row;
+% end
 % 
-%  output :    SIG        : density of seawater at pressure P (adiabatic)
-%                   [kg/m^3]
-
-t = datestr(date47); % makes dates in characters out of the MATLAb format dates in DATE.
-
-g = gravit (LAT_matrix);
-
-[ssp,info] = snd_spd(P,temp47,sal47,'del grosso',LAT_matrix);
-% 2) SND_SPD(P,T,S,'del grosso',lat) returns the sound speed (m/sec) 
-%             given vectors of salinity (ppt), temperature (deg C), and 
-%             PRESSURE (dbar) using the Del Grosso equation:
+% P = z2p80(Z_matrix,LAT_matrix); %gives the pressure P (dbars) at a depth D (m) at some latitude LAT (degrees).
 % 
-%             Del Grosso, "A New Equation for the speed of sound in Natural
-%             Waters", J. Acoust. Soc. Am. 56#4 (1974).
-
-dsig = diff (sig);
-dz = diff (Z_matrix);
-dp = diff (P);
-
-N2 = (-g(1:length(depth47)-1,:)./sig(1:length(depth47)-1,:)).*(dsig./dz-1./(ssp(1:length(depth47)-1,:).^2).*dp./dz);
-
-[Y,I] = min(N2);
-
-mixed_depth = zeros (1,length(lon47));
-for h=1:length(lon47)
-    mixed_depth (h) = Z_matrix(I(h));
-end
-
-XTickVec=[datenum(2008,2,4),datenum(2008,3:9,1),datenum(2008,9,23)];
-contourf(date47,depth47,sal47, 34:0.2:35.5);
-    set(gca, 'ydir', 'reverse');
-    ylabel('depth [m]');
-    xlabel('day of year');
-    colormap jet;
-    c=colorbar;
-    ylabel(c,'salinity [psu]');
-    title('seal47');
-    set(gca,'XTick',XTickVec);
-    datetick('x','dd.mm.','keepticks');
-hold 
-plot(date47,mixed_depth,'LineWidth',1.5,'color','m');
-print('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\mixedlayer+sal47','-dsvg');
-close
-
-plot(date47,mixed_depth);
-set(gca, 'ydir', 'reverse');
-    ylabel('depth [m]');
-    xlabel('day of year');
-    title('seal47');
-    set(gca,'XTick',XTickVec);
-    datetick('x','dd.mm.','keepticks');
-print('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\mixedlayer','-dsvg');
+% [SPV,K,SterAn] = alpha(P,temp47,sal47);
+% 
+%  PTEMP = theta(P,temp47,sal47); %is the local potential temperature
+%        % at reference pressure P0 using Bryden 1973 polynomial for
+%        % adiabatic lapse rate and Runge-Kutta fourth order integration
+%        % algorithm.
+% 
+% sig = sigma(P,temp47,sal47,1);
+% 
+% %  SIGMA  Density of Seawater
+% 
+% clear rho_0 rho_i S_i S_0 S_f h_0 XTickVec t h_if;    
+% %% mixed layer depth
+% % Seal data project MAR440 HT-18 Eleonora Van Sitteren Group 2 
+% Z_matrix = zeros(length(depth47),length(lon47));
+% for i=1:length(lon47)
+% Z_matrix (:,i) = depth47;
+% end
+% 
+% LAT_row = lat47;
+% 
+% LAT_matrix = zeros (length(47),length(lon47));
+% for o=1:length(depth47)
+%     LAT_matrix (o,:) = LAT_row;
+% end
+% 
+% P = z2p80(Z_matrix,LAT_matrix); %gives the pressure P (dbars) at a depth D (m) at some latitude LAT (degrees).
+% 
+% [SPV,K,SterAn] = alpha(P,temp47,sal47);
+% 
+%  PTEMP = theta(P,temp47,sal47); %is the local potential temperature
+%        % at reference pressure P0 using Bryden 1973 polynomial for
+%        % adiabatic lapse rate and Runge-Kutta fourth order integration
+%        % algorithm.
+% 
+% sig = sigma(P,temp47,sal47,1);
+% 
+% %  SIGMA  Density of Seawater
+% % 
+% %  SIG = SIGMA( P , T , S , [Pref] )
+% %     
+% %  computation of density of seawater 
+% %  referenced to arbitrary pressures 
+% %  based on 'alpha.m'
+% % 
+% %  input  :    P        : pressure [dbar]
+% %         T        : in situ temperature [degC] IPTS-68
+% %         S        : salinity [psu]             IPSS-78
+% %         Pref    [p]    : optional reference pressure
+% %                                  use: SIGMA(Pref,THETA(P,T,S,Pref),S)
+% % 
+% %  output :    SIG        : density of seawater at pressure P (adiabatic)
+% %                   [kg/m^3]
+% 
+% g = gravit (LAT_matrix);
+% 
+% [ssp,info] = snd_spd(P,temp47,sal47,'del grosso',LAT_matrix);
+% % 2) SND_SPD(P,T,S,'del grosso',lat) returns the sound speed (m/sec) 
+% %             given vectors of salinity (ppt), temperature (deg C), and 
+% %             PRESSURE (dbar) using the Del Grosso equation:
+% % 
+% %             Del Grosso, "A New Equation for the speed of sound in Natural
+% %             Waters", J. Acoust. Soc. Am. 56#4 (1974).
+% 
+% dsig = diff (sig);
+% dz = diff (Z_matrix);
+% dp = diff (P);
+% 
+% N2 = (-g(1:length(depth47)-1,:)./sig(1:length(depth47)-1,:)).*(dsig./dz-1./(ssp(1:length(depth47)-1,:).^2).*dp./dz);
+% 
+% [Y,I] = min(N2);
+% 
+% mixed_depth = zeros (1,length(lon47));
+% for h=1:length(lon47)
+%     mixed_depth (h) = Z_matrix(I(h));
+% end
+% 
+% XTickVec=[datenum(2008,2,4),datenum(2008,3:9,1),datenum(2008,9,23)];
+% contourf(date47,depth47,sal47, 34:0.2:35.5);
+%     set(gca, 'ydir', 'reverse');
+%     ylabel('depth [m]');
+%     xlabel('day of year');
+%     colormap jet;
+%     c=colorbar;
+%     ylabel(c,'salinity [psu]');
+%     title('seal47');
+%     set(gca,'XTick',XTickVec);
+%     datetick('x','dd.mm.','keepticks');
+% hold 
+% plot(date47,mixed_depth,'LineWidth',1.5,'color','m');
+% print('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\mixedlayer+sal47','-dsvg');
+% close
+% 
+% plot(date47,mixed_depth);
+% set(gca, 'ydir', 'reverse');
+%     ylabel('depth [m]');
+%     xlabel('day of year');
+%     title('seal47');
+%     set(gca,'XTick',XTickVec);
+%     datetick('x','dd.mm.','keepticks');
+% print('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\mixedlayer','-dsvg');
+% clear dp dsig dz g h i l info K LAT_matrix LAT_row N2 o P PTEMP sig SPV ssp SterAn Y Z_matrix; 
 %% potential density
 d0_47=sw_dens0(sal47,temp47);
 contourf(date47,depth47,d0_47, 1027:0.05:1028);
@@ -908,14 +1282,16 @@ ml47=zeros(1,length(lon47));
 clear t  u;
 for t=1:length(lon47)
    for u=3:length(depth47)
-           if depth47(u) not 'NaN';
-                if +d0_47(u,t)-d0_47(3,t)>0.02;
+           if depth47(u) 
+                not 'NaN';
+                if +d0_47(u,t)-d0_47(3,t)>0.02
                 ml47(t)=depth47(u); 
                 break
                 end
            end 
    end 
 end
+
 XTickVec=[datenum(2008,2,4),datenum(2008,3:9,1),datenum(2008,9,23)];
 plot(date47,ml47); % mixed layer depth
 set(gca, 'ydir', 'reverse');
@@ -926,39 +1302,51 @@ set(gca, 'ydir', 'reverse');
     datetick('x','dd.mm.','keepticks');
 print('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\mixedlayer_dens0','-dsvg');
 
-%% ice formation with ML depth... V_0 replaced with mixed layer depth
-%seal 47
-rho_0=1027;     %kg m-3
-rho_i=920;      %kg m-3
-S_i=10;         %psu
-% S_0=sum(sal47(3:21,250:260)); %salinity from date250 to date350
-% S_f=sum(sal47(3:21,350:360));
-% h_i = (rho_0*mixed_*S_0-rho_0*h_0*S_f)/(rho_i*S_i-rho_0*S_f); %net ice formation rate over the time frame
-% h_id = h_i/(date47(350)-date47(250)); %ice formation rate by day
-clear h_if
-for t=1:(length(date47)-30)
-    S_0=sum(sal47(3:21,t));
-    S_f=sum(sal47(3:21,t+30));
-    h_if(t) = ((rho_0*mixed_depth(t)*S_0-rho_0*mixed_depth(t)*S_f)/(rho_i*S_i-rho_0*S_f))/(date47(t+30)-date47(t));
-end
-
-plot(date47(1:length(date47)-30),h_if); %daily ice growth (difference between day t and day t+30)
-    line([date47(1) date47(length(date47))], [0 0], 'color','r');
-    XTickVec=[datenum(2008,2,4),datenum(2008,3:10,1)];
-    ylabel('icegrowth [m/d]');
+contourf(date47,depth47,d0_47-d0_47(3,:), -0.1:0.2:1);
+set(gca, 'ydir', 'reverse');
+    colorbar;
+    ylabel('depth [m]');
     xlabel('day of year');
-    title('ice formation rate seal 47. h_0 = mixed layer depth');
+    title('seal47');
     set(gca,'XTick',XTickVec);
     datetick('x','dd.mm.','keepticks');
-    
-clear rho_0 rho_i S_i S_0 S_f h_0
+print('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\dens0_diff','-dsvg');
+
+clear t l c ans u;
+% %% ice formation with ML depth... V_0 replaced with mixed layer depth
+% %seal 47
+% rho_0=1027;     %kg m-3
+% rho_i=920;      %kg m-3
+% S_i=10;         %psu
+% % S_0=sum(sal47(3:21,250:260)); %salinity from date250 to date350
+% % S_f=sum(sal47(3:21,350:360));
+% % h_i = (rho_0*mixed_*S_0-rho_0*h_0*S_f)/(rho_i*S_i-rho_0*S_f); %net ice formation rate over the time frame
+% % h_id = h_i/(date47(350)-date47(250)); %ice formation rate by day
+% clear h_if
+% h_if=zeros(1,length(lon47)-30);
+% for t=1:(length(date47)-30)
+%     S_0=sum(sal47(3:21,t));
+%     S_f=sum(sal47(3:21,t+30));
+%     h_if(t) = ((rho_0*mixed_depth(t)*S_0-rho_0*mixed_depth(t)*S_f)/(rho_i*S_i-rho_0*S_f))/(date47(t+30)-date47(t));
+% end
+% 
+% plot(date47(1:length(date47)-30),h_if); %daily ice growth (difference between day t and day t+30)
+%     line([date47(1) date47(length(date47))], [0 0], 'color','r');
+%     XTickVec=[datenum(2008,2,4),datenum(2008,3:10,1)];
+%     ylabel('icegrowth [m/d]');
+%     xlabel('day of year');
+%     title('ice formation rate seal 47. h_0 = mixed layer depth');
+%     set(gca,'XTick',XTickVec);
+%     datetick('x','dd.mm.','keepticks');
+%     
+% clear rho_0 rho_i S_i S_0 S_f h_0 t I
 
 
 %% static zone
 %dates 219-400
 figure(2);
 hold off;
-XTickVec=[datenum(2008,4:6,1)];
+XTickVec=datenum(2008,4:6,1);
 contourf(date47(219:400),depth47,d0_47(:,219:400),1027:0.05:1028);
     set(gca, 'ydir', 'reverse');
     ylabel('depth [m]');
@@ -966,12 +1354,13 @@ contourf(date47(219:400),depth47,d0_47(:,219:400),1027:0.05:1028);
     colormap jet;
     c=colorbar;
     ylabel(c,'potential density [kg m-3');
-    title('seal47');
+    title('seal47 sal in static zone, red line = most static zone');
     set(gca,'XTick',XTickVec);
     datetick('x','dd.mm.','keepticks');
-hold;
+hold on;
 plot(date47(219:400),ml47(219:400),'color','r');
-
+hold off;
+close;
 %% smooth
 sal47s=smooth2a(sal47,1 ,100); %entered matrix, number of rows, number of columns
 subplot(1,2,1);
@@ -992,7 +1381,6 @@ rho_i=920; %kg m-3
 S_i=10;      %psu
 h_0=100;     %m
 
-
 for t=1:(length(date47)-30)
     S_0=sum(sal47s(3:21,t));
     S_f=sum(sal47s(3:21,t+30));
@@ -1007,14 +1395,321 @@ plot(date47(1:length(date47)-30),h_if); %daily ice growth (difference between da
     datetick('x','dd.mm.','keepticks');
     title('daily ice growth');
 
-clear rho_0 rho_i h_0
+clear rho_0 rho_i h_0 S_0 S_f S_i t c
+
+%% better smoothing (press data into one day)
+%   REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-FUNCTION SMOOTHDAY REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+% sal47t=transpose(sal47);
+% for t=1:length(depth47)
+%    tt=timetable(d47,sal47t(:,t));
+%     tt=retime(tt,'daily', 'mean');  
+%     tt=timetable2table(tt); %row 1: time row 2: salinity at depth t
+%     timen47=tt(:,1); %new date format showing each day with data once
+%     tt(:,1)=[]; %delete time column out of table
+%     tt=table2array(tt); %transform sal table (1x57) to sal array (1x57)
+%     sal47s2(t,:)=tt; %add sal column to a new array sal47s2
+% end  
+% XTickVec=[datenum(2008,2,4),datenum(2008,3:9,1),datenum(2008,9,23)];
+% timen47=table2array(timen47);
+% time47=datenum(timen47);
+% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+[sal47s2,time47, timen47]=smoothday(sal47,depth47,date47);
+contourf(time47,depth47,smooth2a(sal47s2,1,15), 33.8:0.2:35.5);
+    set(gca, 'ydir', 'reverse');
+    ylabel('depth [m]');
+    xlabel('day of year');
+    colormap jet;
+    c=colorbar;
+    ylabel(c,'salinity [psu]');
+    title('seal47 mean value at each day');
+    set(gca,'XTick',XTickVec);
+    datetick('x','dd.mm.','keepticks');
+print('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\seal47salinitytimesmoothday','-dsvg');
+clear t;
+%% ice growth smoothed 47 area 1
+close;
+ ig47=ice_growth(sal47s2,time47,1); %call function ice_growth 
+subplot(2,2,1);
+    XTickVec=datenum(2008,2:10,1);
+plot(time47(1:length(ig47)),smooth2a(ig47,1,15)); %smoothed over 3 days
+    line([time47(1) time47(length(time47))], [0 0], 'color','r');
+    line([time47(65) time47(65)], [-0.2 0.2], 'color','r');
+    line([time47(117) time47(117)], [-0.2 0.2], 'color','r');
+    ylabel('icegrowth [m/d]');
+    xlabel('day of year');
+    title('ice formation rate ');
+    set(gcf,'position',[100 100 900 300]);
+    set(gca,'XTick',XTickVec);
+    datetick('x','dd.mm.','keepticks');
+hold;
+
+subplot(2,2,2);
+contourf(time47,depth47,sal47s2, 34:0.2:35.5);
+    set(gca, 'ydir', 'reverse');
+    ylabel('depth [m]');
+    xlabel('day of year');  
+    line([time47(65) time47(65)], [0 600], 'color','black', 'LineWidth', 2);
+    line([time47(117) time47(117)], [0 600], 'color','black', 'LineWidth', 2);
+    line([time47(1) time47(length(time47))], [100 100]);
+    colormap jet;
+    title('salinity');
+    set(gca,'XTick',XTickVec);
+    datetick('x','dd.mm.','keepticks');
+hold;
+
+subplot(2,2,3); %sum of salinity in upper 100 m
+plot(time47, nansum(sal47s2(1:21,:)));   
+    ylim([645 660]);
+    ylabel('Sum of salinity in upper 100 m');
+    xlabel('day of year');  
+    line([time47(65) time47(65)], [0 700], 'color','black', 'LineWidth', 2);
+    line([time47(117) time47(117)], [0 700], 'color','black', 'LineWidth', 2);
+    set(gcf,'position',[100 100 900 300])
+    title('Sum of salinity');
+    set(gca,'XTick',XTickVec);
+    datetick('x','dd.mm.','keepticks');
+    
+subplot(2,2,4); %sealpath
+scatter(lon47,lat47,5,day47);
+    title('seal 47 path');
+    xlabel('Longitude');
+    ylabel('Latitude');
+    h47=colorbar;
+    ylabel(h47,'days of year');
+    colormap jet;
+    line([30 36], [-69 -69]);
+    line([30 30], [-69 -64]);
+    line([30 36], [-64 -64]);
+    line([36 36], [-69 -64]);
+set(gcf, 'Position', get(0, 'Screensize'));
 
 
+mean1=mean(ig47(65:117));
+var1=var(ig47(65:117));
+sum(ig47(65:117)); % ice growth from 4.4. to 30.5. (stable period)
+
+%% ice concentration
+[si47s,time47, timen47]=smoothday(si47,1,date47);
+plot(time47, si47s);   
+    ylabel('sea ice concentration');
+    xlabel('day of year');  
+    line([time47(65) time47(65)], [0 1], 'color','black', 'LineWidth', 2);
+    line([time47(117) time47(117)], [0 1], 'color','black', 'LineWidth', 2);
+    set(gcf,'position',[100 100 900 300])   
+%     title('Sum of salinity');
+    set(gca,'XTick',XTickVec);
+    datetick('x','dd.mm.','keepticks');
+mean_si=nanmean(si47s(65:117));
+var_si=nanvar(si47s(65:117));
+
+%seal 99
+[si99s,time99, timen99]=smoothday(si99,1,date99);
+plot(time99, si99s);   
+    ylabel('sea ice concentration');
+    xlabel('day of year');  
+%     line([time99(65) time99(65)], [0 1], 'color','black', 'LineWidth', 2);
+%     line([time99(117) time99(117)], [0 1], 'color','black', 'LineWidth', 2);
+    set(gcf,'position',[100 100 900 300])   
+%     title('Sum of salinity');
+    set(gca,'XTick',XTickVec);
+    datetick('x','dd.mm.','keepticks');
+%% ice growth smoothed 47 area 2
+close;
+ ig47=ice_growth(sal47s2,time47,1); %call function ice_growth 
+subplot(2,2,1);
+    XTickVec=datenum(2008,8:10,1);
+plot(time47(196:223),smooth(ig47(196:223),1)); %not smoothed
+%     line([time47(1) time47(length(time47))], [0 0], 'color','r');
+%     line([time47(65) time47(65)], [-0.2 0.2], 'color','r');
+%     line([time47(117) time47(117)], [-0.2 0.2], 'color','r');
+    ylabel('icegrowth [m/d]');
+    xlabel('day of year');
+    title('ice formation rate ');
+    set(gcf,'position',[100 100 900 300]);
+        set(gca,'XTick',XTickVec);
+    datetick('x','dd.mm.','keepticks');
+hold;
+
+subplot(2,2,2);
+contourf(time47(196:223),depth47,sal47s2(:,196:223), 34:0.2:35.5);
+    set(gca, 'ydir', 'reverse');
+    ylabel('depth [m]');
+    xlabel('day of year');  
+%     line([time47(65) time47(65)], [0 600], 'color','black', 'LineWidth', 2);
+%     line([time47(117) time47(117)], [0 600], 'color','black', 'LineWidth', 2);
+%     line([time47(1) time47(length(time47))], [100 100]);
+    colormap jet;
+    title('salinity');
+    set(gca,'XTick',XTickVec);
+    datetick('x','dd.mm.','keepticks');
+hold;
+
+subplot(2,2,3); %sum of salinity in upper 100 m
+plot(time47(196:223), nansum(sal47s2(1:21,196:223)));   
+%     ylim([645 660]);
+    ylabel('Sum of salinity in upper 100 m');
+    xlabel('day of year');  
+%     line([time47(65) time47(65)], [0 700], 'color','black', 'LineWidth', 2);
+%     line([time47(117) time47(117)], [0 700], 'color','black', 'LineWidth', 2);
+    set(gcf,'position',[100 100 900 300])
+    title('Sum of salinity');
+    set(gca,'XTick',XTickVec);
+    datetick('x','dd.mm.','keepticks');
+    
+subplot(2,2,4); %sealpath
+scatter(lon47,lat47,5,day47);
+    title('seal 47 path');
+    xlabel('Longitude');
+    ylabel('Latitude');
+    h47=colorbar;
+    ylabel(h47,'days of year');
+    colormap jet;
+%     line([30 36], [-69 -69]);
+%     line([30 30], [-69 -64]);
+%     line([30 36], [-64 -64]);
+%     line([36 36], [-69 -64]);
+set(gcf, 'Position', get(0, 'Screensize'));
+mean2=mean(ig47(196:223));
+var2=var(ig47(197:223));
+
+%% ice growth smoothed 55 area 1
+close;
+[sal55s2,time55,timen55]=smoothday(sal55,depth55,date55);
+ ig55=ice_growth(sal55s2,time55,1); %call function ice_growth 
+subplot(2,2,1);
+    XTickVec=datenum(2008,2:10,1);
+plot(time55(1:length(ig55)),smooth2a(ig55,1,15)); %smoothed over 3 days
+    line([time55(1) time55(length(time55))], [0 0], 'color','r');
+    line([time55(109) time55(109)], [-0.2 0.2], 'color','r');
+    line([time55(173) time55(173)], [-0.2 0.2], 'color','r');
+    ylabel('icegrowth [m/d]');
+    xlabel('day of year');
+    title('ice formation rate ');
+    set(gca,'XTick',XTickVec);
+    datetick('x','dd.mm.','keepticks');
+hold;
+
+subplot(2,2,2);
+contourf(time55,depth55,sal55s2, 34:0.2:35.5);
+    set(gca, 'ydir', 'reverse');
+    ylabel('depth [m]');
+    xlabel('day of year');  
+    line([time55(109) time55(109)], [0 600], 'color','black', 'LineWidth', 2);
+    line([time55(173) time55(173)], [0 600], 'color','black', 'LineWidth', 2);
+    line([time55(1) time55(length(time55))], [100 100]);
+    colormap jet;
+    title('salinity');
+    set(gca,'XTick',XTickVec);
+    datetick('x','dd.mm.','keepticks');
+hold;
+
+subplot(2,2,3); %sum of salinity in upper 100 m
+plot(time55, nansum(sal55s2(1:21,:)));   
+    ylim([645 660]);
+    ylabel('Sum of salinity in upper 100 m');
+    xlabel('day of year');  
+    line([time55(109) time55(109)], [0 700], 'color','black', 'LineWidth', 2);
+    line([time55(173) time55(173)], [0 700], 'color','black', 'LineWidth', 2);
+    set(gcf,'position',[100 100 900 300])
+    title('Sum of salinity');
+    set(gca,'XTick',XTickVec);
+    datetick('x','dd.mm.','keepticks');
+    
+subplot(2,2,4); %sealpath
+scatter(lon55,lat55,5,day55);
+    title('seal 55 path');
+    xlabel('Longitude');
+    ylabel('Latitude');
+    h55=colorbar;
+    ylabel(h55,'days of year');
+    colormap jet;
+%     line([30 36], [-69 -69]);
+%     line([30 30], [-69 -64]);
+%     line([30 36], [-64 -64]);
+%     line([36 36], [-69 -64]);
+set(gcf, 'Position', get(0, 'Screensize'));
+
+
+mean1_55=mean(ig55(109:173));
+var1_55=var(ig55(109:173));
+sum(ig55(109:173)); % ice growth from 4.4. to 30.5. (stable period)
+%% ice growth smoothed x time y
+close;
+%Enter Sal depth and datex here
+salx=sal99;
+depthx=depth99;
+datex=date99;
+time0=1;
+timeend=240;
+%REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH-
+[salsx2,timex,timenx]=smoothday(salx,depthx,datex);
+ igx=ice_growth(salsx2,timex,1); %call function ice_growth 
+subplot(2,2,1);
+    XTickVec=datenum(2008,2:11,1);
+plot(timex(1:length(igx)),smooth2a(igx,1,3)); %smoothed over 3 days
+    line([timex(1) timex(length(timex))], [0 0], 'color','r');
+    line([timex(time0) timex(time0)], [-0.2 0.2], 'color','r');
+    line([timex(timeend) timex(timeend)], [-0.2 0.2], 'color','r');
+    ylabel('icegrowth [m/d]');
+    xlabel('day of year');
+    title('ice formation rate ');
+    set(gca,'XTick',XTickVec);
+    datetick('x','dd.mm.','keepticks');
+hold;
+
+subplot(2,2,2);
+contourf(timex,depthx,salsx2, 33.6:0.2:35.5);
+    set(gca, 'ydir', 'reverse');
+    ylabel('depth [m]');
+    xlabel('day of year');  
+    line([timex(time0) timex(time0)], [0 600], 'color','black', 'LineWidth', 2);
+    line([timex(timeend) timex(timeend)], [0 600], 'color','black', 'LineWidth', 2);
+    line([timex(1) timex(length(timex))], [100 100]);
+    colormap jet;
+    title('salinity');
+    set(gca,'XTick',XTickVec);
+    datetick('x','dd.mm.','keepticks');
+hold;
+
+subplot(2,2,3); %sum of salinity in upper 100 m
+plot(timex, nansum(salsx2(1:21,:)));   
+    ylim([645 660]);
+    ylabel('Sum of salinity in upper 100 m');
+    xlabel('day of year');  
+    line([timex(time0) timex(time0)], [0 700], 'color','black', 'LineWidth', 2);
+    line([timex(timeend) timex(timeend)], [0 700], 'color','black', 'LineWidth', 2);
+    title('Sum of salinity');
+    set(gca,'XTick',XTickVec);
+    datetick('x','dd.mm.','keepticks');
+    
+subplot(2,2,4); %sealpath
+scatter(lon55,lat55,5,day55);
+    title('seal 55 path');
+    xlabel('Longitude');
+    ylabel('Latitude');
+    h55=colorbar;
+    ylabel(h55,'days of year');
+    colormap jet;
+%     line([30 36], [-69 -69]);
+%     line([30 30], [-69 -64]);
+%     line([30 36], [-64 -64]);
+%     line([36 36], [-69 -64]);
+set(gcf, 'Position', get(0, 'Screensize'));
+
+
+mean1_x=nanmean(igx(time0:timeend));
+var1_x=nanvar(igx(time0:timeend));
+sumx=nansum(igx(time0:timeend)); % ice growth from 4.4. to 30.5. (stable period)
+
+
+clear time0 timeend 
+%% clear some stuff
+clear o PTEMP P
 
 %% to do
-% interpolate data
+% function ice growth rate
 % overlay map with lat/lon data
-% Sea ice modelling(FESOM) [Timmermann R, Danilov S, Schröter JA (2006) Geophys Res Abstr 8:07063]
-% When calculating Ice growth NaN is treated as zeroes
+% Sea ice modelling(FESOM) [Timmermann R, Danilov S, SchrÃ¶ter JA (2006) Geophys Res Abstr 8:07063]
+
 ##### SOURCE END #####
 --></body></html>
