@@ -3,7 +3,7 @@
 % script Heiner
 
 %import files
-load('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\rawdata\seal_47.mat');
+load('rawdata\seal_47.mat');
 date47 = DATE;
 lat47 = LAT;
 lon47 = LON;
@@ -16,14 +16,14 @@ lon47(272)=[];
 sal47(:,272)=[];
 temp47(:,272)=[];
 
-load('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\rawdata\SIConc_Seals');
+load('rawdata\SIConc_Seals');
 si47=SI_47;
 si55=SI_55;
 si99=SI_99;
 si47(272)=[];
 
 
-load('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\rawdata\seal_55.mat');
+load('rawdata\seal_55.mat');
 date55 = DATE;
 lat55 = LAT;
 lon55 = LON;
@@ -31,7 +31,7 @@ sal55 = SAL;
 temp55 = TEMP;
 depth55 = Z;
 
-load('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\rawdata\seal_99.mat');
+load('rawdata\seal_99.mat');
 date99 = DATE;
 lat99 = LAT;
 lon99 = LON;
@@ -40,7 +40,7 @@ temp99 = TEMP;
 depth99 = Z;
 
 
-addpath('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\Code\cmocean_v1.4\cmocean')
+addpath('cmocean_v1.4\cmocean')
 % import cmocean;
 clear DATE LON LAT SAL TEMP Z info SI_47 SI_55 SI_99;
 %end import
@@ -1174,8 +1174,19 @@ hold on;
 print('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\report\55_saltimeseries','-dsvg');
 
 %% freshwater content
-% ml47s
-% sal47s2
+% ml47s mixed layer depth
+% sal47s2 salinity
+for t=1:length(time47)
+   for w=3:length(depth47)
+           if depth47(w) 
+                not 'NaN';
+                if +d0_47s(w,t)-d0_47s(3,t)>0.05 %threshold value of potential density
+                ml47sw(t)=w; 
+                break
+                end
+           end 
+   end 
+end
 
 %% clear some stuff
 clear o PTEMP P
