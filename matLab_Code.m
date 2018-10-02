@@ -995,10 +995,11 @@ pcolor(time55,depth55,sal55s2);
 
 %% daily potential density Seal 47 and ml depth
 [temp47s,~,~]=smoothday(temp47,depth47,date47);
-d0_47s=sw_dens0(smooth2a(sal47s2,1,31),temp47s);
-contourf(time47,depth47,d0_47s, 1027:0.05:1028);
-% shading interp
-colorbar;
+d0_47s=sw_dens0(smooth2a(sal47s2,1,1),temp47s);
+% contourf(time47,depth47,d0_47s, 1027:0.05:1028);
+% % shading interp
+% colorbar;
+
 
 ml47s=zeros(1,length(time47));
 clear t  u;
@@ -1006,7 +1007,7 @@ for t=1:length(time47)
    for u=3:length(depth47)
            if depth47(u) 
                 not 'NaN';
-                if +d0_47s(u,t)-d0_47s(3,t)>0.02
+                if +d0_47s(u,t)-d0_47s(3,t)>0.05 %threshold value of potential density
                 ml47s(t)=depth47(u); 
                 break
                 end
@@ -1038,39 +1039,39 @@ print('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\dens0_diff_s_
 clear t l c ans u;
 
 %% potential density and ML Seal 55
-[temp55s,~,~]=smoothday(temp55,depth55,date55);
-d0_55s=sw_dens0(smooth2a(sal55s2,1,31),temp55s);
-contourf(time55,depth55,d0_55s, 1027:0.05:1028);
-% shading interp
-colorbar;
+    [temp55s,~,~]=smoothday(temp55,depth55,date55);
+    d0_55s=sw_dens0(smooth2a(sal55s2,1,31),temp55s);
+    contourf(time55,depth55,d0_55s, 1027:0.05:1028);
+    % shading interp
+    colorbar;
 
-ml55s=zeros(1,length(time55));
-clear t  u;
-for t=1:length(time55)
-   for u=3:length(depth55)
-           if depth55(u) 
-                not 'NaN';
-                if +d0_55s(u,t)-d0_55s(3,t)>0.05
-                ml55s(t)=depth55(u); 
-                break
-                end
-           end 
-   end 
-end
+    ml55s=zeros(1,length(time55));
+    clear t  u;
+    for t=1:length(time55)
+       for u=3:length(depth55)
+               if depth55(u) 
+                    not 'NaN';
+                    if +d0_55s(u,t)-d0_55s(3,t)>0.05
+                    ml55s(t)=depth55(u); 
+                    break
+                    end
+               end 
+       end 
+    end
 
-close all;
-figure(1);
-subplot(3,1,1);
-XTickVec=[datenum(2008,2,4),datenum(2008,3:9,1),datenum(2008,9,23)];
-plot(time55,smooth(ml55s,31)); % mixed layer depth
-set(gca, 'ydir', 'reverse');
-    ylabel('depth [m]');
-    xlabel('day of year');
-    title('seal55');
-    set(gca,'XTick',XTickVec);
-    datetick('x','dd.mm.','keepticks');
-    line([time55(109) time55(109)], [0 300], 'color','black', 'LineWidth', 2);
-    line([time55(173) time55(173)], [0 300], 'color','black', 'LineWidth', 2);
+    close all;
+    figure(1);
+    subplot(3,1,1);
+    XTickVec=[datenum(2008,2,4),datenum(2008,3:9,1),datenum(2008,9,23)];
+    plot(time55,smooth(ml55s,31)); % mixed layer depth
+    set(gca, 'ydir', 'reverse');
+        ylabel('depth [m]');
+        xlabel('day of year');
+        title('seal55');
+        set(gca,'XTick',XTickVec);
+        datetick('x','dd.mm.','keepticks');
+        line([time55(109) time55(109)], [0 300], 'color','black', 'LineWidth', 2);
+        line([time55(173) time55(173)], [0 300], 'color','black', 'LineWidth', 2);
 
 % print('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\mixedlayer_dens0_s_55','-dsvg');
 subplot(3,1,2);
@@ -1172,6 +1173,9 @@ hold on;
     datetick('x','dd mmm','keepticks');
 print('C:\Users\Heiner\Desktop\Marine Project\BOX1_project\figures\report\55_saltimeseries','-dsvg');
 
+%% freshwater content
+% ml47s
+% sal47s2
 
 %% clear some stuff
 clear o PTEMP P
